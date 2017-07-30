@@ -52,6 +52,7 @@
     <Compile Include="EventDriven\EventDrivenFSMTransition.cs" />
     <Compile Include="EventDriven\EventInvokeEventArgs.cs" />
     <Compile Include="EventDriven\EventInvokeEventHandler.cs" />
+    <Compile Include="EventDriven\ITransitAction.cs" />
     <Compile Include="Extends\FSM.cs" />
     <Compile Include="FSM.cs" />
     <Compile Include="FSMState.cs" />

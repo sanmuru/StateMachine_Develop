@@ -56,6 +56,27 @@ namespace SamLu.StateMachine.EventDriven
             return base.Transit(transition, new object[] { transition }.Concat(args ?? Enumerable.Empty<object>()).ToArray());
         }
 
+        protected override bool Transit(EventDrivenFSMState state, params object[] args)
+        {
+            // 引发退出动作。
+            this.CurrentState?.ExitAction?.Invoke(this.CurrentState);
+
+            // 切换当前状态。
+            this.CurrentState = state;
+
+            // 引发转换动作。
+            this.CurrentState?.TransitAction?.Invoke(
+                this.CurrentState,
+                args?.FirstOrDefault(),
+                args?.Length == 0 ? null : args.Skip(1).ToArray()
+            );
+
+            // 引发进入动作。
+            state?.EntryAction?.Invoke(state);
+
+            return true;
+        }
+
         /// <summary>
         /// 为 <see cref="EventDrivenFSM"/> 的一个指定状态添加指定转换。
         /// </summary>

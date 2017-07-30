@@ -106,7 +106,7 @@ namespace SamLu.StateMachine.EventDriven
 
         //public EventDrivenFSMTransition(object target, Type declaredType, string eventName) : this(target, declaredType.GetEvent(eventName)) { }
         //public EventDrivenFSMTransition(object target, Type declaredType, string eventName, BindingFlags flags) : this(target, declaredType.GetEvent(eventName, flags)) { }
-        
+
         /// <summary>
         /// 使用指定的处理委托初始化 <see cref="EventDrivenFSMTransition"/> 类的新实例。
         /// </summary>
@@ -302,7 +302,7 @@ namespace SamLu.StateMachine.EventDriven
                 ILGenerator ILGen = constructorBuilder.GetILGenerator();
                 ILGen.Emit(OpCodes.Ldarg_0); // ldarg.0
                 ILGen.Emit(OpCodes.Ldarg, transitionParameterBuilder.Position); // ldarg.n
-                ILGen.Emit(OpCodes.Stfld, transitionFieldBuilder); // stfld class [Helper]Helper.StateMachine.EventDrivenFSMTransition CallingMethodType#no#::transition
+                ILGen.Emit(OpCodes.Stfld, transitionFieldBuilder); // stfld class [#ThisAssemblyName#]#ThisAssemblyName#.StateMachine.EventDrivenFSMTransition CallingMethodType#no#::transition
                 ILGen.Emit(OpCodes.Ret);
                 #endregion
                 #region callingMethodMethodBuilder
@@ -310,7 +310,7 @@ namespace SamLu.StateMachine.EventDriven
                 ILGen = callingMethodMethodBuilder.GetILGenerator();
                 ILGen.Emit(OpCodes.Nop); // nop
                 ILGen.Emit(OpCodes.Ldarg_0); // ldarg.0
-                ILGen.Emit(OpCodes.Ldfld, transitionFieldBuilder); // ldfld class [Helper]Helper.StateMachine.EventDrivenFSMTransition CallingMethodType#no#::transition
+                ILGen.Emit(OpCodes.Ldfld, transitionFieldBuilder); // ldfld class [#ThisAssemblyName#]#ThisAssemblyName#.StateMachine.EventDrivenFSMTransition CallingMethodType#no#::transition
                 ILGen.Emit(OpCodes.Ldc_I4, parameterTypes.Length); // ldc.i4.#length#
                 ILGen.Emit(OpCodes.Newarr, typeof(object)); // newarr[mscorlib]System.Object
                 for (int i = 0; i < parameterTypes.Length; i++)
@@ -322,7 +322,7 @@ namespace SamLu.StateMachine.EventDriven
                         ILGen.Emit(OpCodes.Box, parameterTypes[i]); // box #TParameter#
                     ILGen.Emit(OpCodes.Stelem_Ref);
                 }
-                ILGen.Emit(OpCodes.Call, this.GetType().GetMethod(nameof(this.CallingMethod))); // call instance void Helper.StateMachine.EventDrivenFSMTransition::CallingMethod(object[])
+                ILGen.Emit(OpCodes.Call, this.GetType().GetMethod(nameof(this.CallingMethod))); // call instance void #ThisAssemblyName#.StateMachine.EventDrivenFSMTransition::CallingMethod(object[])
                 ILGen.Emit(OpCodes.Nop); // nop
                 if (returnType != typeof(void))
                 {
@@ -436,6 +436,7 @@ namespace SamLu.StateMachine.EventDriven
         }
         #endregion
 
+        #region EventInvoke
         /// <summary>
         /// <see cref="EventDrivenFSMTransition"/> 的注册事件引发的事件。在注册事件引发后发生。
         /// </summary>
@@ -449,6 +450,7 @@ namespace SamLu.StateMachine.EventDriven
         {
             this.EventInvoke?.Invoke(this, e);
         }
+        #endregion
 
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用

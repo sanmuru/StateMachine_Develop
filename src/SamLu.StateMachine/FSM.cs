@@ -20,6 +20,7 @@ namespace SamLu.StateMachine
         public virtual IState CurrentState
         {
             get => this.currentState;
+            protected set => this.currentState = value;
         }
 
         #region StartState
@@ -202,13 +203,13 @@ namespace SamLu.StateMachine
         protected virtual bool Transit(IState state, params object[] args)
         {
             // 引发退出动作。
-            this.currentState?.ExitAction?.Invoke(this.currentState);
+            this.CurrentState?.ExitAction?.Invoke(this.CurrentState);
 
             // 切换当前状态。
-            this.currentState = state;
+            this.CurrentState = state;
 
             // 引发转换动作。
-            this.currentState?.TransitAction?.Invoke(this.currentState, args);
+            this.CurrentState?.TransitAction?.Invoke(this.CurrentState, args);
 
             // 引发进入动作。
             state?.EntryAction?.Invoke(state);
@@ -258,6 +259,7 @@ namespace SamLu.StateMachine
         public virtual TState CurrentState
         {
             get => this.currentState;
+            protected set => this.currentState = value;
         }
 
         #region StartState
@@ -419,13 +421,13 @@ namespace SamLu.StateMachine
         protected virtual bool Transit(TState state, params object[] args)
         {
             // 引发退出动作。
-            this.currentState?.ExitAction?.Invoke(this.currentState);
+            this.CurrentState?.ExitAction?.Invoke(this.CurrentState);
 
             // 切换当前状态。
-            this.currentState = state;
+            this.CurrentState = state;
 
             // 引发转换动作。
-            this.currentState?.TransitAction?.Invoke(this.currentState, args);
+            this.CurrentState?.TransitAction?.Invoke(this.CurrentState, args);
 
             // 引发进入动作。
             state?.EntryAction?.Invoke(state);
