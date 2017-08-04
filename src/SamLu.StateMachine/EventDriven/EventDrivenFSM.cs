@@ -1,5 +1,4 @@
-﻿using SamLu.StateMachine.Extends;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,6 +41,11 @@ namespace SamLu.StateMachine.EventDriven
         }
 #pragma warning restore 1591
 
+        /// <summary>
+        /// 事件驱动的有限状态机模型（ <see cref="EventDrivenFSM"/> ）的状态（ <see cref="EventDrivenFSMTransition"/> ）的事件引发（ <see cref="EventDrivenFSMTransition.EventInvoke"/> ）事件的处理方法。
+        /// </summary>
+        /// <param name="sender">事件源。</param>
+        /// <param name="e">事件参数。</param>
         protected virtual void Transition_EventInvoke(object sender, EventInvokeEventArgs e)
         {
             if (sender is EventDrivenFSMTransition transition)
@@ -51,11 +55,23 @@ namespace SamLu.StateMachine.EventDriven
             }
         }
 
+        /// <summary>
+        /// <see cref="EventDrivenFSM"/> 的转换操作。此操作沿指定的转换进行，接受指定的参数。
+        /// </summary>
+        /// <param name="transition">指定的转换。</param>
+        /// <param name="args">指定的参数。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
         public override bool Transit(EventDrivenFSMTransition transition, params object[] args)
         {
             return base.Transit(transition, new object[] { transition }.Concat(args ?? Enumerable.Empty<object>()).ToArray());
         }
 
+        /// <summary>
+        /// <see cref="EventDrivenFSM"/> 的转换操作。此操作将使有限状态机模型的当前状态转换为指定的状态，接受指定的参数。
+        /// </summary>
+        /// <param name="state">指定的状态。</param>
+        /// <param name="args">指定的参数。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
         protected override bool Transit(EventDrivenFSMState state, params object[] args)
         {
             // 引发退出动作。

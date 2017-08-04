@@ -1,5 +1,4 @@
-﻿using SamLu.StateMachine.Extends;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -188,6 +187,12 @@ namespace SamLu.StateMachine
             this.Transit(this.StartState);
         }
 
+        /// <summary>
+        /// <see cref="FSM"/> 的转换操作。此操作沿指定的转换进行，接受指定的参数。
+        /// </summary>
+        /// <param name="transition">指定的转换。</param>
+        /// <param name="args">指定的参数。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
         public virtual bool Transit(ITransition transition, params object[] args)
         {
             if (transition == null) throw new ArgumentNullException(nameof(transition));
@@ -200,6 +205,12 @@ namespace SamLu.StateMachine
             else return false;
         }
 
+        /// <summary>
+        /// <see cref="FSM"/> 的转换操作。此操作将使有限状态机模型的 <see cref="CurrentState"/> 转换为指定的状态，接受指定的参数。
+        /// </summary>
+        /// <param name="state">指定的状态。</param>
+        /// <param name="args">指定的参数。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
         protected virtual bool Transit(IState state, params object[] args)
         {
             // 引发退出动作。
@@ -418,6 +429,27 @@ namespace SamLu.StateMachine
             this.Transit(this.StartState);
         }
 
+        /// <summary>
+        /// <see cref="FSM{TState, TTransition}"/> 的转换操作。此操作沿指定的转换进行，接受指定的参数。
+        /// </summary>
+        /// <param name="transition">指定的转换。</param>
+        /// <param name="args">指定的参数。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
+        public virtual bool Transit(TTransition transition, params object[] args)
+        {
+            if (this.CurrentState.RecurGetReachableTransitions<TState, TTransition>().Contains(transition) && this.States.Contains(transition.Target))
+            {
+                return this.Transit(transition.Target, args);
+            }
+            else return false;
+        }
+
+        /// <summary>
+        /// <see cref="FSM{TState, TTransition}"/> 的转换操作。此操作将使有限状态机模型的 <see cref="CurrentState"/> 转换为指定的状态，接受指定的参数。
+        /// </summary>
+        /// <param name="state">指定的状态。</param>
+        /// <param name="args">指定的参数。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
         protected virtual bool Transit(TState state, params object[] args)
         {
             // 引发退出动作。
@@ -433,15 +465,6 @@ namespace SamLu.StateMachine
             state?.EntryAction?.Invoke(state);
 
             return true;
-        }
-
-        public virtual bool Transit(TTransition transition, params object[] args)
-        {
-            if (this.CurrentState.RecurGetReachableTransitions<TState, TTransition>().Contains(transition) && this.States.Contains(transition.Target))
-            {
-                return this.Transit(transition.Target, args);
-            }
-            else return false;
         }
 
         /// <summary>
