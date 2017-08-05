@@ -474,7 +474,7 @@ namespace SamLu.StateMachine
         /// <param name="input">指定的输入。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
         /// <exception cref="ArgumentOutOfRangeException">接受的输入超出 <see cref="FSM"/> 能接受的范围。</exception>
-        public bool Transit<TInput>(TInput input)
+        public virtual bool Transit<TInput>(TInput input)
         {
             if ((object)input is TTransition transition)
                 return this.Transit(transition);

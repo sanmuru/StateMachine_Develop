@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="DFA.cs" />
+    <Compile Include="DFAState.cs" />
     <Compile Include="EventDriven\EventDrivenFSM.cs" />
     <Compile Include="EventDriven\EventDrivenFSMEpsilonTransition.cs" />
     <Compile Include="EventDriven\EventDrivenFSMState.cs" />
@@ -58,10 +60,15 @@
     <Compile Include="FSMState.cs" />
     <Compile Include="FSMTransition.cs" />
     <Compile Include="IAction.cs" />
+    <Compile Include="IDFA.cs" />
+    <Compile Include="INFA.cs" />
     <Compile Include="IEpsilonTransition.cs" />
     <Compile Include="IFSM.cs" />
+    <Compile Include="INFAState.cs" />
     <Compile Include="IState.cs" />
     <Compile Include="ITransition.cs" />
+    <Compile Include="NFA.cs" />
+    <Compile Include="NFAState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SamLu\CollectionChangedEventArgs.cs" />
     <Compile Include="SamLu\CollectionChangingEventArgs.cs" />
