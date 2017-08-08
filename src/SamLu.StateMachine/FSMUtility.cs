@@ -416,12 +416,12 @@ namespace SamLu.StateMachine
         {
             var states = fsm.States.ToList();
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("StartState: ({0}), total: {1}{2}", states.IndexOf(fsm.StartState), states.Count, Environment.NewLine);
+            sb.AppendFormat("StartState: ({0}), total: {1}{2}", fsm.StartState.GetStringInfo(states), states.Count, Environment.NewLine);
             sb.Append(string.Join(
                 Environment.NewLine,
                 (from state in states
                  from transition in state.Transitions
-                 select string.Format("  ({0}) ---> ({1})", states.IndexOf(state), states.IndexOf(transition.Target))
+                 select string.Format("  ({0}) ---> ({1})", state.GetStringInfo(states), transition.Target.GetStringInfo(states))
                 ).ToArray()
             ));
 
@@ -434,16 +434,31 @@ namespace SamLu.StateMachine
         {
             var states = fsm.States.ToList();
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("StartState: ({0}), total: {1}{2}", states.IndexOf(fsm.StartState), states.Count, Environment.NewLine);
+            sb.AppendFormat("StartState: ({0}), total: {1}{2}", fsm.StartState.GetStringInfo(states), states.Count, Environment.NewLine);
             sb.Append(string.Join(
                 Environment.NewLine,
                 (from state in states
                  from transition in state.Transitions
-                 select string.Format("  ({0}) ---> ({1})", states.IndexOf(state), states.IndexOf(transition.Target))
+                 select string.Format("  ({0}) ---> ({1})", state.GetStringInfo(states), transition.Target.GetStringInfo(states))
                 ).ToArray()
             ));
 
             return sb.ToString();
+        }
+
+        public static string GetStringInfo(this IState state, IList<IState> states)
+        {
+            if (state.IsTerminal)
+                return string.Format("({0})", states.IndexOf(state));
+            else return states.IndexOf(state).ToString();
+        }
+
+        public static string GetStringInfo<TState>(this TState state, IList<TState> states)
+            where TState : IState
+        {
+            if (state.IsTerminal)
+                return string.Format("({0})", states.IndexOf(state));
+            else return states.IndexOf(state).ToString();
         }
 #endif
     }

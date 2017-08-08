@@ -11,6 +11,12 @@ namespace SamLu.StateMachine
     /// </summary>
     public interface IState
     {
+
+        /// <summary>
+        /// 获取或设置一个值，指示该有限自动机的状态是否为结束状态。
+        /// </summary>
+        bool IsTerminal { get; set; }
+
         /// <summary>
         /// 获取表示 <see cref="IState"/> 的进入动作。在进入状态时进行。
         /// </summary>

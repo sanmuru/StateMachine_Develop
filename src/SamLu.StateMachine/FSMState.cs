@@ -14,6 +14,12 @@ namespace SamLu.StateMachine
     public class FSMState<TTransition> : IState<TTransition> where TTransition : ITransition
     {
         private List<TTransition> transitions = new List<TTransition>();
+
+        /// <summary>
+        /// 获取或设置一个值，指示该有限自动机的状态是否为结束状态。
+        /// </summary>
+        public bool IsTerminal { get; set; }
+
         /// <summary>
         /// 获取 <see cref="FSMState{TTransition}"/> 的转换集。
         /// </summary>
@@ -38,6 +44,17 @@ namespace SamLu.StateMachine
         /// 获取表示 <see cref="FSMState{TTransition}"/> 的转换动作。在进行特定转换时进行。
         /// </summary>
         public IAction TransitAction { get; set; }
+
+        /// <summary>
+        /// 初始化 <see cref="FSMState{TTransition}"/> 类的新实例。
+        /// </summary>
+        public FSMState() : this(false) { }
+
+        /// <summary>
+        /// 初始化 <see cref="FSMState{TTransition}"/> 类的新实例，该实例接受一个指定是否为结束状态的值。
+        /// </summary>
+        /// <param name="isTerminal">一个值，指示该实例是否为结束状态。</param>
+        public FSMState(bool isTerminal) => this.IsTerminal = isTerminal;
 
         /// <summary>
         /// 添加指定的转换。

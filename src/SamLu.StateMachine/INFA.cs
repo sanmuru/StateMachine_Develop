@@ -30,6 +30,11 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 null 。</exception>
         /// <exception cref="ArgumentNullException"><paramref name="epsilonTransition"/> 的值为 null 。</exception>
         bool RemoveTransition(IState state, IEpsilonTransition epsilonTransition);
+
+        /// <summary>
+        /// 最小化 NFA 。
+        /// </summary>
+        void Optimize();
     }
 
     /// <summary>

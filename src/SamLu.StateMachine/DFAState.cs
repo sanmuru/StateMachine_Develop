@@ -14,6 +14,17 @@ namespace SamLu.StateMachine
         where TTransition : ITransition
     {
         /// <summary>
+        /// 初始化 <see cref="DFAState{TTransition}"/> 类的新实例。
+        /// </summary>
+        public DFAState() : base() { }
+
+        /// <summary>
+        /// 初始化 <see cref="DFAState{TTransition}"/> 类的新实例，该实例接受一个指定是否为结束状态的值。
+        /// </summary>
+        /// <param name="isTerminal">一个值，指示该实例是否为结束状态。</param>
+        public DFAState(bool isTerminal) : base(isTerminal) { }
+
+        /// <summary>
         /// 添加指定的转换。
         /// </summary>
         /// <param name="transition">要添加的转换。</param>

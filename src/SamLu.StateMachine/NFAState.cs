@@ -16,6 +16,17 @@ namespace SamLu.StateMachine
         where TEpsilonTransition : TTransition, IEpsilonTransition
     {
         /// <summary>
+        /// 初始化 <see cref="NFAState{TTransition, TEpsilonTransition}"/> 类的新实例。
+        /// </summary>
+        public NFAState() : base() { }
+
+        /// <summary>
+        /// 初始化 <see cref="NFAState{TTransition, TEpsilonTransition}"/> 类的新实例，该实例接受一个指定是否为结束状态的值。
+        /// </summary>
+        /// <param name="isTerminal">一个值，指示该实例是否为结束状态。</param>
+        public NFAState(bool isTerminal) : base(isTerminal) { }
+
+        /// <summary>
         /// 添加指定的转换。
         /// </summary>
         /// <param name="epsilonTransition">要添加的 ε 转换。</param>
