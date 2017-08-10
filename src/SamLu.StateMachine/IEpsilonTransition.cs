@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamLu.StateMachine.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace SamLu.StateMachine
     /// <summary>
     /// 定义了有限状态机的 ε 转换应遵循的基本约束。
     /// </summary>
+    [DebugInfoProxy(typeof(EpsilonTransitionDebugInfo))]
     public interface IEpsilonTransition : ITransition { }
 
     /// <summary>

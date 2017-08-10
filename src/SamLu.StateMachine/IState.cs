@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamLu.Runtime;
+using SamLu.StateMachine.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,6 +65,7 @@ namespace SamLu.StateMachine
     /// 定义了有限状态机的状态应遵循的基本约束。
     /// </summary>
     /// <typeparam name="TTransition">有限状态机的转换的类型。</typeparam>
+    [DebugInfoProxy(typeof(FSMStateDebugInfo), TypeParameterFillin.ModifiedType)]
     public interface IState<TTransition> : IState where TTransition : ITransition
     {
         /// <summary>
