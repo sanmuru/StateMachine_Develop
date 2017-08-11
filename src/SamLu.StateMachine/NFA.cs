@@ -90,21 +90,21 @@ namespace SamLu.StateMachine
 
                 foreach (var avaliableState in avaliableStates)
                 {
-                    // 计算状态 avaliableState 的 ε 闭包。
+                    /* 计算状态 avaliableState 的 ε 闭包。 */
                     // 所谓一个状态的 ε 闭包就是从这个状态出发，仅通过 ε 转换就可以到达的所有状态的集合。
                     var epsilonClosure = avaliableState.RecurGetReachableStates<TState,TTransition>().ToList();
                     // 把状态 avaliableState 从其 ε 闭包中排除出去。
                     epsilonClosure.Remove(avaliableState);
 
-                    // 复制所有有效转换到状态 avaliableState 。
+                    /* 复制所有有效转换到状态 avaliableState 。 */
                     var avaliableTransitions = epsilonClosure
                         .SelectMany(state => state.Transitions)
                         .Where(transition => !(transition is TEpsilonTransition))
                         .ToList();
                     foreach (var avaliableTransition in avaliableTransitions)
                         this.AttachTransition(avaliableState, avaliableTransition);
-
-                    // 移除状态 avaliableState 的所有 ε 转换。
+                    
+                    /* 移除状态 avaliableState 的所有 ε 转换。 */
                     // 与此同时，由于此状态机框架的实现方式：移除某个转换且其所指向的状态不为状态机任意可达转换的目标时，此状态不可达，即被排除于状态机外。
                     var epsilonTransitions = avaliableState.Transitions
                         .Where(transition => transition is TEpsilonTransition)

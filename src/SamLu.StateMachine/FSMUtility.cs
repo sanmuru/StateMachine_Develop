@@ -228,21 +228,17 @@ namespace SamLu.StateMachine
         {
             if (transition == null) throw new ArgumentNullException(nameof(transition));
 
-            if (transition.Target.RecurGetReachableStates() is HashSet<IState> states)
-            {
-                states.Add(transition.Target);
-                return states;
-            }
-            else return Enumerable.Empty<IState>();
+            HashSet<IState> states = new HashSet<IState> { transition.Target };
+            FSMUtility.RecurGetReachableStatesInternal(transition.Target, states);
+
+            return states;
         }
 
         private static void RecurGetReachableStatesInternal(IState startState, HashSet<IState> states)
         {
             foreach (var transition in startState.Transitions.Where(_transition => _transition != null && _transition.Target != null))
             {
-                bool f = states.Add(transition.Target);
-
-                if (f && transition is IEpsilonTransition)
+                if (transition is IEpsilonTransition && states.Add(transition.Target))
                     FSMUtility.RecurGetReachableStatesInternal(transition.Target, states);
             }
         }
@@ -281,12 +277,10 @@ namespace SamLu.StateMachine
         {
             if (transition == null) throw new ArgumentNullException(nameof(transition));
 
-            if (transition.Target.RecurGetReachableStates<TState, TTransition>() is HashSet<TState> states)
-            {
-                states.Add(transition.Target);
-                return states;
-            }
-            else return Enumerable.Empty<TState>();
+            HashSet<TState> states = new HashSet<TState> { transition.Target };
+            FSMUtility.RecurGetReachableStatesInternal<TState, TTransition>(transition.Target, states);
+
+            return states;
         }
 
         private static void RecurGetReachableStatesInternal<TState, TTransition>(TState startState, HashSet<TState> states)
@@ -295,13 +289,10 @@ namespace SamLu.StateMachine
         {
             foreach (var transition in startState.Transitions.Where(_transition => _transition != null && _transition.Target != null))
             {
-                bool f = states.Add(transition.Target);
-
-                if (f && transition is IEpsilonTransition)
+                if (transition is IEpsilonTransition && states.Add(transition.Target))
                     FSMUtility.RecurGetReachableStatesInternal<TState, TTransition>(transition.Target, states);
             }
         }
-
         #endregion
 
         #region RecurGetReachableTransitions
@@ -318,8 +309,7 @@ namespace SamLu.StateMachine
             HashSet<ITransition> transitions = new HashSet<ITransition>();
             foreach (var transition in startState.Transitions.Where(_transition => _transition != null))
             {
-                transitions.Add(transition);
-                if (transition is IEpsilonTransition)
+                if (transitions.Add(transition) && transition is IEpsilonTransition)
                     transitions.UnionWith(transition.RecurGetReachableTransitions());
             }
 
@@ -346,9 +336,7 @@ namespace SamLu.StateMachine
         {
             foreach (var t in transition.Target.Transitions)
             {
-                bool f = transitions.Add(t);
-
-                if (f && t is IEpsilonTransition)
+                if (transitions.Add(t) && t is IEpsilonTransition)
                     FSMUtility.RecurGetReachableTransitionsInternal(transition, transitions);
             }
         }
@@ -370,8 +358,7 @@ namespace SamLu.StateMachine
             HashSet<TTransition> transitions = new HashSet<TTransition>();
             foreach (var transition in startState.Transitions.Where(_transition => _transition != null))
             {
-                transitions.Add(transition);
-                if (transition is IEpsilonTransition)
+                if (transitions.Add(transition) && transition is IEpsilonTransition)
                     transitions.UnionWith(transition.RecurGetReachableTransitions<TState, TTransition>());
             }
 
@@ -404,9 +391,7 @@ namespace SamLu.StateMachine
         {
             foreach (var t in transition.Target.Transitions)
             {
-                bool f = transitions.Add(t);
-
-                if (f && t is IEpsilonTransition)
+                if (transitions.Add(t) && t is IEpsilonTransition)
                     FSMUtility.RecurGetReachableTransitionsInternal<TState, TTransition>(transition, transitions);
             }
         }
