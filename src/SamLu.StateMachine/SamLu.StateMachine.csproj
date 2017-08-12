@@ -52,10 +52,12 @@
     <Compile Include="Adapter\ITransitionAdapter.cs" />
     <Compile Include="DFA.cs" />
     <Compile Include="DFAState.cs" />
-    <Compile Include="Diagnostics\DebugInfoProxyAttribute.cs" />
+    <Compile Include="SamLu\Diagnostics\DebugInfoProxyAttribute.cs" />
     <Compile Include="Diagnostics\EpsilonTransitionDebugInfo.cs" />
     <Compile Include="Diagnostics\FSMDebugInfo.cs" />
     <Compile Include="Diagnostics\FSMStateDebugInfo.cs" />
+    <Compile Include="SamLu\Diagnostics\IDebugInfo.cs" />
+    <Compile Include="SamLu\Diagnostics\DebugInfo.cs" />
     <Compile Include="SamLu\Runtime\TypeParameterFillin.cs" />
     <Compile Include="EventDriven\EventDrivenFSM.cs" />
     <Compile Include="EventDriven\EventDrivenFSMEpsilonTransition.cs" />
@@ -87,5 +89,6 @@
     <Compile Include="System\Collections\Generic\EqualityComparisonComparer.cs" />
     <Compile Include="System\EqualityComparison.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using SamLu.StateMachine.Diagnostics;
+﻿using SamLu.Diagnostics;
+using SamLu.StateMachine.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

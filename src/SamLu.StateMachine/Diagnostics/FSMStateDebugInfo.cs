@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamLu.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SamLu.StateMachine.Diagnostics
 {
-    public class FSMStateDebugInfo
+    public class FSMStateDebugInfo : IDebugInfo
     {
         private IState state;
         private IList<IState> states;

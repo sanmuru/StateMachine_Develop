@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamLu.StateMachine.Diagnostics
+namespace SamLu.Diagnostics
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface, AllowMultiple =false, Inherited = true)]
     public class DebugInfoProxyAttribute : Attribute
@@ -20,8 +20,11 @@ namespace SamLu.StateMachine.Diagnostics
             if (proxyType == null) throw new ArgumentNullException(nameof(proxyType));
             if (typeFragments == null) throw new ArgumentNullException(nameof(typeFragments));
 
-            var debuginfo_Property = proxyType.GetProperty("DebugInfo");
-            if (debuginfo_Property?.PropertyType != typeof(string)) throw new NotSupportedException($"{proxyType} 不支持获取调试信息。");
+            if (!typeof(IDebugInfo).IsAssignableFrom(proxyType))
+            {
+                var debuginfo_Property = proxyType.GetProperty("DebugInfo");
+                if (debuginfo_Property?.PropertyType != typeof(string)) throw new NotSupportedException($"{proxyType} 不支持获取调试信息。");
+            }
 
             this.proxyType = proxyType;
             this.typeFragments = typeFragments;

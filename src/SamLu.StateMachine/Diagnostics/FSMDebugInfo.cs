@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamLu.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace SamLu.StateMachine.Diagnostics
 {
-    public class FSMDebugInfo
+    public class FSMDebugInfo : IDebugInfo
     {
         private IFSM fsm;
         private object[] args;
-
+        
         public virtual string DebugInfo
         {
             get
