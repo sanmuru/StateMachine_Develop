@@ -20,10 +20,13 @@ namespace SamLu.Diagnostics
             if (proxyType == null) throw new ArgumentNullException(nameof(proxyType));
             if (typeFragments == null) throw new ArgumentNullException(nameof(typeFragments));
 
-            if (!typeof(IDebugInfo).IsAssignableFrom(proxyType))
+            if (proxyType.IsAbstract)
+                throw new NotSupportedException($"{proxyType} 不支持获取调试信息。");
+            else if (!typeof(IDebugInfo).IsAssignableFrom(proxyType))
             {
                 var debuginfo_Property = proxyType.GetProperty("DebugInfo");
-                if (debuginfo_Property?.PropertyType != typeof(string)) throw new NotSupportedException($"{proxyType} 不支持获取调试信息。");
+                if (debuginfo_Property?.PropertyType != typeof(string))
+                    throw new NotSupportedException($"{proxyType} 不支持获取调试信息。");
             }
 
             this.proxyType = proxyType;

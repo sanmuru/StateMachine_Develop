@@ -56,12 +56,12 @@ namespace SamLu.Runtime
 
                     countStack.Push(countStack.Pop() - 1);
 
-                    while (countStack.Count!=0&& countStack.Peek()==0)
+                    while (countStack.Count != 0 && countStack.Peek() == 0)
                     {
                         countStack.Pop();
                         int length = countStack.Pop();
                         Type[] types = new Type[length];
-                        for (int i = 0; i < length; i++) types[i] = typeStack.Pop();
+                        for (int i = length - 1; i >= 0; i--) types[i] = typeStack.Pop();
 
                         Type type = typeStack.Pop().MakeGenericType(types);
                         if (typeStack.Count == 0 && !type.ContainsGenericParameters) return type;
