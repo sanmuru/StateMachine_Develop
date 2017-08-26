@@ -31,13 +31,13 @@ namespace SamLu.StateMachine
         /// </summary>
         /// <param name="epsilonTransition">要添加的 ε 转换。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        public bool AttachTransition(TEpsilonTransition epsilonTransition) => base.AttachTransition(epsilonTransition);
+        public virtual bool AttachTransition(TEpsilonTransition epsilonTransition) => base.AttachTransition(epsilonTransition);
 
         /// <summary>
         /// 移除指定的转换。
         /// </summary>
         /// <param name="epsilonTransition">要添加的 ε 转换。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        public bool RemoveTransition(TEpsilonTransition epsilonTransition) => base.RemoveTransition(epsilonTransition);
+        public virtual bool RemoveTransition(TEpsilonTransition epsilonTransition) => base.RemoveTransition(epsilonTransition);
     }
 }

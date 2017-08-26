@@ -397,55 +397,117 @@ namespace SamLu.StateMachine
         }
         #endregion
 
-#if DEBUG
-        public static string GetStringInfo(this IFSM fsm)
+        #region EpsilonClosure
+        /// <summary>
+        /// 消除 <see cref="INFA"/> 中的所有 ε 闭包。
+        /// </summary>
+        public static void EpsilonClosure(this INFA nfa)
         {
-            var states = fsm.States.ToList();
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("StartState: ({0}), total: {1}{2}", fsm.StartState.GetStringInfo(states), states.Count, Environment.NewLine);
-            sb.Append(string.Join(
-                Environment.NewLine,
-                (from state in states
-                 from transition in state.Transitions
-                 select string.Format("  ({0}) ---> ({1})", state.GetStringInfo(states), transition.Target.GetStringInfo(states))
-                ).ToArray()
-            ));
+            if (nfa == null) throw new ArgumentNullException(nameof(nfa));
 
-            return sb.ToString();
+            if (nfa.StartState
+                .RecurGetTransitions()
+                .Any(transition => transition is IEpsilonTransition)
+            )
+            {
+                var states = nfa.States;
+                // 计算有效状态
+                var avaliableStates = states.Where(state =>
+                    // 起始状态
+                    object.Equals(state, nfa.StartState) ||
+                    // 存在非 ε 转换的输入转换
+                    states.SelectMany(_state => _state.Transitions)
+                        .Where(transition => object.Equals(transition.Target, state))
+                        .Any(transition => !(transition is IEpsilonTransition))
+                ).ToList();
+
+                foreach (var avaliableState in avaliableStates)
+                {
+                    /* 计算状态 avaliableState 的 ε 闭包。 */
+                    // 所谓一个状态的 ε 闭包就是从这个状态出发，仅通过 ε 转换就可以到达的所有状态的集合。
+                    var epsilonClosure = avaliableState.RecurGetReachableStates().ToList();
+                    // 把状态 avaliableState 从其 ε 闭包中排除出去。
+                    epsilonClosure.Remove(avaliableState);
+
+                    /* 复制所有有效转换到状态 avaliableState 。 */
+                    var avaliableTransitions = epsilonClosure
+                        .SelectMany(state => state.Transitions)
+                        .Where(transition => !(transition is IEpsilonTransition))
+                        .ToList();
+                    foreach (var avaliableTransition in avaliableTransitions)
+                        nfa.AttachTransition(avaliableState, avaliableTransition);
+
+                    /* 移除状态 avaliableState 的所有 ε 转换。 */
+                    // 与此同时，由于此状态机框架的实现方式：移除某个转换且其所指向的状态不为状态机任意可达转换的目标时，此状态不可达，即被排除于状态机外。
+                    var epsilonTransitions = avaliableState.Transitions
+                        .Where(transition => transition is IEpsilonTransition)
+                        .ToList();
+                    foreach (var epsilonTransition in epsilonTransitions)
+                        nfa.RemoveTransition(avaliableState, epsilonTransition);
+
+                    // 如果存在一个有效状态可以仅通过 ε 转换到达结束状态的话，那么这个状态应该被标记为结束状态。
+                    if (epsilonClosure.Any(state => state.IsTerminal))
+                        avaliableState.IsTerminal = true;
+                }
+            }
         }
 
-        public static string GetStringInfo<TState, TTransition>(this IFSM<TState, TTransition> fsm)
+        /// <summary>
+        /// 消除 <see cref="INFA{TState, TTransition, TEpsilonTransition}"/> 中的所有 ε 闭包。
+        /// </summary>
+        public static void EpsilonClosure<TState, TTransition, TEpsilonTransition>(this INFA<TState, TTransition, TEpsilonTransition> nfa)
             where TState : IState<TTransition>
-            where TTransition : ITransition<TState>
+            where TTransition : class, ITransition<TState>
+            where TEpsilonTransition : TTransition, IEpsilonTransition<TState>
         {
-            var states = fsm.States.ToList();
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("StartState: ({0}), total: {1}{2}", fsm.StartState.GetStringInfo(states), states.Count, Environment.NewLine);
-            sb.Append(string.Join(
-                Environment.NewLine,
-                (from state in states
-                 from transition in state.Transitions
-                 select string.Format("  ({0}) ---> ({1})", state.GetStringInfo(states), transition.Target.GetStringInfo(states))
-                ).ToArray()
-            ));
+            if (nfa == null) throw new ArgumentNullException(nameof(nfa));
 
-            return sb.ToString();
-        }
+            if (nfa.StartState
+                .RecurGetTransitions<TState, TTransition>()
+                .Any(transition => transition is TEpsilonTransition)
+            )
+            {
+                var states = nfa.States;
+                // 计算有效状态
+                var avaliableStates = states.Where(state =>
+                    // 起始状态
+                    object.Equals(state, nfa.StartState) ||
+                    // 存在非 ε 转换的输入转换
+                    states.SelectMany(_state => _state.Transitions)
+                        .Where(transition => object.Equals(transition.Target, state))
+                        .Any(transition => !(transition is TEpsilonTransition))
+                ).ToList();
 
-        public static string GetStringInfo(this IState state, IList<IState> states)
-        {
-            if (state.IsTerminal)
-                return string.Format("({0})", states.IndexOf(state));
-            else return states.IndexOf(state).ToString();
-        }
+                foreach (var avaliableState in avaliableStates)
+                {
+                    /* 计算状态 avaliableState 的 ε 闭包。 */
+                    // 所谓一个状态的 ε 闭包就是从这个状态出发，仅通过 ε 转换就可以到达的所有状态的集合。
+                    var epsilonClosure = avaliableState.RecurGetReachableStates<TState, TTransition>().ToList();
+                    // 把状态 avaliableState 从其 ε 闭包中排除出去。
+                    epsilonClosure.Remove(avaliableState);
 
-        public static string GetStringInfo<TState>(this TState state, IList<TState> states)
-            where TState : IState
-        {
-            if (state.IsTerminal)
-                return string.Format("({0})", states.IndexOf(state));
-            else return states.IndexOf(state).ToString();
+                    /* 复制所有有效转换到状态 avaliableState 。 */
+                    var avaliableTransitions = epsilonClosure
+                        .SelectMany(state => state.Transitions)
+                        .Where(transition => !(transition is TEpsilonTransition))
+                        .ToList();
+                    foreach (var avaliableTransition in avaliableTransitions)
+                        nfa.AttachTransition(avaliableState, avaliableTransition);
+
+                    /* 移除状态 avaliableState 的所有 ε 转换。 */
+                    // 与此同时，由于此状态机框架的实现方式：移除某个转换且其所指向的状态不为状态机任意可达转换的目标时，此状态不可达，即被排除于状态机外。
+                    var epsilonTransitions = avaliableState.Transitions
+                        .Where(transition => transition is TEpsilonTransition)
+                        .ToList();
+                    foreach (var epsilonTransition in epsilonTransitions)
+                        nfa.RemoveTransition(avaliableState, epsilonTransition);
+
+                    // 如果存在一个有效状态可以仅通过 ε 转换到达结束状态的话，那么这个状态应该被标记为结束状态。
+                    if (epsilonClosure.Any(state => state.IsTerminal))
+                        avaliableState.IsTerminal = true;
+                }
+            }
         }
-#endif
+        #endregion
     }
 }
