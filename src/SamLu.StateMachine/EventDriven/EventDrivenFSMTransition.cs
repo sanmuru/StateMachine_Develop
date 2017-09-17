@@ -16,8 +16,13 @@ namespace SamLu.StateMachine.EventDriven
     /// </summary>
     public class EventDrivenFSMTransition : FSMTransition<EventDrivenFSMState>, IDisposable
     {
+#if false
         private static int no = 0;
+#endif
         private AppDomain appDomain;
+        /// <summary>
+        /// 包含定义适配的委托对象的类型的程序集的域。
+        /// </summary>
         protected AppDomain AppDomain
         {
             get
@@ -30,26 +35,46 @@ namespace SamLu.StateMachine.EventDriven
                     this.appDomain = AppDomain.CreateDomain("CallingMethodAppDomain" + ++EventDrivenFSMTransition.no);
 #endif
                 }
+
                 return this.appDomain;
             }
         }
 
-        private ModuleBuilder moduleBuilder;
-        protected ModuleBuilder ModuleBuilder
+        private AssemblyBuilder assemblyBuilder;
+        /// <summary>
+        /// 包含定义适配的委托对象的类型的程序集。
+        /// </summary>
+        protected AssemblyBuilder AssemblyBuilder
         {
             get
             {
-                if (this.moduleBuilder == null)
+                if (this.assemblyBuilder==null)
                 {
-                    this.moduleBuilder = this.AppDomain.DefineDynamicAssembly(
+                    this.assemblyBuilder = this.AppDomain.DefineDynamicAssembly(
                         new AssemblyName(string.Format("CallingMethodAssembly.dll")),
 #if OutputAssembly
                         AssemblyBuilderAccess.RunAndSave
 #else
                         AssemblyBuilderAccess.RunAndCollect
 #endif
-                    )
-                    .DefineDynamicModule(string.Format("CallingMethodModule.dll")
+                    );
+                }
+
+                return this.assemblyBuilder;
+            }
+        }
+
+        private ModuleBuilder moduleBuilder;
+        /// <summary>
+        /// 包含定义适配的委托对象的类型的程序集模块。
+        /// </summary>
+        protected ModuleBuilder ModuleBuilder
+        {
+            get
+            {
+                if (this.moduleBuilder == null)
+                {
+                    this.moduleBuilder = this.AssemblyBuilder.DefineDynamicModule(string.Format("CallingMethodModule.dll")
 #if OutputAssembly
             ,           string.Format("CallingMethodModule.dll")
 #endif
@@ -104,19 +129,32 @@ namespace SamLu.StateMachine.EventDriven
             )
         { }
 
-        //public EventDrivenFSMTransition(object target, Type declaredType, string eventName) : this(target, declaredType.GetEvent(eventName)) { }
-        //public EventDrivenFSMTransition(object target, Type declaredType, string eventName, BindingFlags flags) : this(target, declaredType.GetEvent(eventName, flags)) { }
+#if false
+        public EventDrivenFSMTransition(object target, Type declaredType, string eventName) : this(target, declaredType.GetEvent(eventName)) { }
+        public EventDrivenFSMTransition(object target, Type declaredType, string eventName, BindingFlags flags) : this(target, declaredType.GetEvent(eventName, flags)) { }
+#endif
 
+#region CreateEventDrivenFSMTransition
         /// <summary>
         /// 使用指定的处理委托初始化 <see cref="EventDrivenFSMTransition"/> 类的新实例。
         /// </summary>
         /// <typeparam name="THandler">指定的处理委托的类型。</typeparam>
         /// <param name="handler">指定的处理委托。</param>
         /// <returns><see cref="EventDrivenFSMTransition"/> 类的新实例，该实例使用指定的处理委托和默认的添加、移除方法。</returns>
+        /// <exception cref="ArgumentOutOfRangeException">类型 <typeparamref name="THandler"/> 不是从 <see cref="Delegate"/> 派生。</exception>
+        /// <seealso cref="CreateEventDrivenFSMTransitionInternal{THandler}(THandler, Action{THandler}, Action{THandler})"/>
         public static EventDrivenFSMTransition CreateEventDrivenFSMTransition<THandler>(THandler handler)
             where THandler : class
         {
-            return EventDrivenFSMTransition.CreateEventDrivenFSMTransition(
+            if (!typeof(Delegate).IsAssignableFrom(typeof(THandler)))
+                throw new ArgumentOutOfRangeException(
+                    nameof(handler),
+                    new InvalidCastException(
+                        string.Format("{0} 不能从 {1} 转换。", typeof(Delegate).FullName, typeof(THandler).FullName)
+                    )
+                );
+
+            return EventDrivenFSMTransition.CreateEventDrivenFSMTransitionInternal(
                 handler,
                 ((THandler h) => Delegate.Combine(handler as Delegate, h as Delegate)),
                 ((THandler h) => Delegate.Remove(handler as Delegate, h as Delegate))
@@ -131,6 +169,8 @@ namespace SamLu.StateMachine.EventDriven
         /// <param name="addMethod">指定的添加方法。</param>
         /// <param name="removeMethod">指定的移除方法。</param>
         /// <returns><see cref="EventDrivenFSMTransition"/> 类的新实例，该实例使用指定的处理委托、添加方法和移除方法。</returns>
+        /// <exception cref="ArgumentOutOfRangeException">类型 <typeparamref name="THandler"/> 不是从 <see cref="Delegate"/> 派生。</exception>
+        /// <seealso cref="CreateEventDrivenFSMTransitionInternal{THandler}(THandler, Action{THandler}, Action{THandler})"/>
         public static EventDrivenFSMTransition CreateEventDrivenFSMTransition<THandler>(THandler handler, Action<THandler> addMethod, Action<THandler> removeMethod)
             where THandler : class
         {
@@ -142,6 +182,20 @@ namespace SamLu.StateMachine.EventDriven
                     )
                 );
 
+            return EventDrivenFSMTransition.CreateEventDrivenFSMTransitionInternal(handler, addMethod, removeMethod);
+        }
+
+        /// <summary>
+        /// 使用指定的处理委托、添加方法和移除方法初始化 <see cref="EventDrivenFSMTransition"/> 类的新实例。
+        /// </summary>
+        /// <typeparam name="THandler">指定的处理委托的类型。</typeparam>
+        /// <param name="handler">指定的处理委托。</param>
+        /// <param name="addMethod">指定的添加方法。</param>
+        /// <param name="removeMethod">指定的移除方法。</param>
+        /// <returns><see cref="EventDrivenFSMTransition"/> 类的新实例，该实例使用指定的处理委托、添加方法和移除方法。</returns>
+        protected static EventDrivenFSMTransition CreateEventDrivenFSMTransitionInternal<THandler>(THandler handler, Action<THandler> addMethod = null, Action<THandler> removeMethod = null)
+            where THandler : class
+        {
             return new EventDrivenFSMTransition
                 (
                     typeof(THandler),
@@ -149,6 +203,7 @@ namespace SamLu.StateMachine.EventDriven
                     (removeMethod == null ? null : new Action<Delegate>((Delegate d) => removeMethod(d as THandler)))
                 );
         }
+#endregion
 
         /// <summary>
         /// 将转换的目标设为指定状态。
@@ -163,7 +218,7 @@ namespace SamLu.StateMachine.EventDriven
             return base.SetTarget(state);
         }
 
-        #region 核心
+#region 核心
         /// <summary>
         /// 驱动 <see cref="EventDrivenFSMTransition"/> 转换的调用方法。
         /// </summary>
@@ -285,14 +340,14 @@ namespace SamLu.StateMachine.EventDriven
                         new object[0]
                     )
                 );
-                #region transitionFileBuilder
+#region transitionFileBuilder
                 FieldBuilder transitionFieldBuilder = typeBuilder.DefineField(
                     "transition",
                     typeof(EventDrivenFSMTransition),
                     FieldAttributes.Private
                 );
-                #endregion
-                #region constructorBuilder
+#endregion
+#region constructorBuilder
                 ConstructorBuilder constructorBuilder = typeBuilder.DefineConstructor(
                     MethodAttributes.Public,
                     CallingConventions.Standard,
@@ -304,8 +359,8 @@ namespace SamLu.StateMachine.EventDriven
                 ILGen.Emit(OpCodes.Ldarg, transitionParameterBuilder.Position); // ldarg.n
                 ILGen.Emit(OpCodes.Stfld, transitionFieldBuilder); // stfld class [#ThisAssemblyName#]#ThisAssemblyName#.StateMachine.EventDrivenFSMTransition CallingMethodType#no#::transition
                 ILGen.Emit(OpCodes.Ret);
-                #endregion
-                #region callingMethodMethodBuilder
+#endregion
+#region callingMethodMethodBuilder
                 MethodBuilder callingMethodMethodBuilder = typeBuilder.DefineMethod("CallingMethod", MethodAttributes.Public, returnType, parameterTypes);
                 ILGen = callingMethodMethodBuilder.GetILGenerator();
                 ILGen.Emit(OpCodes.Nop); // nop
@@ -332,7 +387,7 @@ namespace SamLu.StateMachine.EventDriven
                     ILGen.Emit(OpCodes.Ldloc, localReturnValue.LocalIndex); // ldloc.0 
                 }
                 ILGen.Emit(OpCodes.Ret); // ret
-                #endregion
+#endregion
 
                 Type type = typeBuilder.CreateType();
 #if OutputAssembly
@@ -402,6 +457,7 @@ namespace SamLu.StateMachine.EventDriven
         /// <typeparam name="THandler">指定的委托类型。</typeparam>
         /// <param name="removeMethod">指定的拥有指定委托类型的移除方法。</param>
         /// <returns><see cref="CallingMethod(object[])"/> 经过指定的拥有指定委托类型的移除方法适配的委托对象。</returns>
+        /// <exception cref="ArgumentOutOfRangeException">类型 <typeparamref name="THandler"/> 不是从 <see cref="Delegate"/> 派生。</exception>
         public THandler GetDelegateForCallingMethod<THandler>(Action<THandler> removeMethod)
             where THandler : class
         {
@@ -418,9 +474,9 @@ namespace SamLu.StateMachine.EventDriven
                 ((Delegate d) => removeMethod(d as THandler))
             ) as THandler;
         }
-        #endregion
+#endregion
 
-        #region PreviewEventInvoke
+#region PreviewEventInvoke
         /// <summary>
         /// <see cref="EventDrivenFSMTransition"/> 的注册事件引发的事件。在注册事件引发前发生。
         /// </summary>
@@ -434,9 +490,9 @@ namespace SamLu.StateMachine.EventDriven
         {
             this.PreviewEventInvoke?.Invoke(this, e);
         }
-        #endregion
+#endregion
 
-        #region EventInvoke
+#region EventInvoke
         /// <summary>
         /// <see cref="EventDrivenFSMTransition"/> 的注册事件引发的事件。在注册事件引发后发生。
         /// </summary>
@@ -450,9 +506,9 @@ namespace SamLu.StateMachine.EventDriven
         {
             this.EventInvoke?.Invoke(this, e);
         }
-        #endregion
+#endregion
 
-        #region IDisposable Support
+#region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用
 
 #pragma warning disable 1591
@@ -467,7 +523,7 @@ namespace SamLu.StateMachine.EventDriven
 
                 // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
                 // TODO: 将大型字段设置为 null。
-                #region 调用移除方法
+#region 调用移除方法
                 this.callingMethodDic.Clear();
                 this.delegateForCallingMethodDic.Clear();
                 foreach (var tuple in this.removeCallingMethodMethods)
@@ -476,7 +532,7 @@ namespace SamLu.StateMachine.EventDriven
                 foreach (var tuple in this.removeDelegateForCallingMethodMethods)
                     tuple.Item2(tuple.Item1);
                 this.removeDelegateForCallingMethodMethods.Clear();
-                #endregion
+#endregion
 
 #if false
                 AppDomain.Unload(this.AppDomain); // 卸载应用程序域。
@@ -505,6 +561,6 @@ namespace SamLu.StateMachine.EventDriven
             // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
             // GC.SuppressFinalize(this);
         }
-        #endregion
+#endregion
     }
 }

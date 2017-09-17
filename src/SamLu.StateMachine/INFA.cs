@@ -19,7 +19,7 @@ namespace SamLu.StateMachine
         /// <returns>一个值，指示操作是否成功。</returns>
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 null 。</exception>
         /// <exception cref="ArgumentNullException"><paramref name="epsilonTransition"/> 的值为 null 。</exception>
-        bool AttachTransition(IState state, IEpsilonTransition epsilonTransition);
+        bool AttachTransition(INFAState state, IEpsilonTransition epsilonTransition);
 
         /// <summary>
         /// 从 <see cref="INFA"/> 的一个指定状态移除指定 ε 转换。
@@ -29,7 +29,7 @@ namespace SamLu.StateMachine
         /// <returns>一个值，指示操作是否成功。</returns>
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 null 。</exception>
         /// <exception cref="ArgumentNullException"><paramref name="epsilonTransition"/> 的值为 null 。</exception>
-        bool RemoveTransition(IState state, IEpsilonTransition epsilonTransition);
+        bool RemoveTransition(INFAState state, IEpsilonTransition epsilonTransition);
 
         /// <summary>
         /// 最小化 NFA 。
@@ -44,7 +44,7 @@ namespace SamLu.StateMachine
     /// <typeparam name="TTransition">非确定的有限自动机的转换的类型。</typeparam>
     /// <typeparam name="TEpsilonTransition">非确定的有限自动机的 ε 转换的类型。</typeparam>
     public interface INFA<TState, TTransition, TEpsilonTransition> : INFA, IFSM<TState, TTransition>
-        where TState : IState<TTransition>
+        where TState : INFAState<TTransition, TEpsilonTransition>
         where TTransition : class, ITransition<TState>
         where TEpsilonTransition : TTransition, IEpsilonTransition<TState>
     {

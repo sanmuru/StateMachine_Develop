@@ -399,22 +399,22 @@ namespace SamLu.StateMachine
 
         #region EpsilonClosure
         /// <summary>
-        /// 消除 <see cref="INFA"/> 中的所有 ε 闭包。
+        /// 消除 <see cref="IFSM"/> 中的所有 ε 闭包。
         /// </summary>
-        public static void EpsilonClosure(this INFA nfa)
+        public static void EpsilonClosure(this IFSM fsm)
         {
-            if (nfa == null) throw new ArgumentNullException(nameof(nfa));
+            if (fsm == null) throw new ArgumentNullException(nameof(fsm));
 
-            if (nfa.StartState
+            if (fsm.StartState
                 .RecurGetTransitions()
                 .Any(transition => transition is IEpsilonTransition)
             )
             {
-                var states = nfa.States;
+                var states = fsm.States;
                 // 计算有效状态
                 var avaliableStates = states.Where(state =>
                     // 起始状态
-                    object.Equals(state, nfa.StartState) ||
+                    object.Equals(state, fsm.StartState) ||
                     // 存在非 ε 转换的输入转换
                     states.SelectMany(_state => _state.Transitions)
                         .Where(transition => object.Equals(transition.Target, state))
@@ -435,7 +435,7 @@ namespace SamLu.StateMachine
                         .Where(transition => !(transition is IEpsilonTransition))
                         .ToList();
                     foreach (var avaliableTransition in avaliableTransitions)
-                        nfa.AttachTransition(avaliableState, avaliableTransition);
+                        fsm.AttachTransition(avaliableState, avaliableTransition);
 
                     /* 移除状态 avaliableState 的所有 ε 转换。 */
                     // 与此同时，由于此状态机框架的实现方式：移除某个转换且其所指向的状态不为状态机任意可达转换的目标时，此状态不可达，即被排除于状态机外。
@@ -443,7 +443,7 @@ namespace SamLu.StateMachine
                         .Where(transition => transition is IEpsilonTransition)
                         .ToList();
                     foreach (var epsilonTransition in epsilonTransitions)
-                        nfa.RemoveTransition(avaliableState, epsilonTransition);
+                        fsm.RemoveTransition(avaliableState, epsilonTransition);
 
                     // 如果存在一个有效状态可以仅通过 ε 转换到达结束状态的话，那么这个状态应该被标记为结束状态。
                     if (epsilonClosure.Any(state => state.IsTerminal))
@@ -456,7 +456,7 @@ namespace SamLu.StateMachine
         /// 消除 <see cref="INFA{TState, TTransition, TEpsilonTransition}"/> 中的所有 ε 闭包。
         /// </summary>
         public static void EpsilonClosure<TState, TTransition, TEpsilonTransition>(this INFA<TState, TTransition, TEpsilonTransition> nfa)
-            where TState : IState<TTransition>
+            where TState : INFAState<TTransition, TEpsilonTransition>
             where TTransition : class, ITransition<TState>
             where TEpsilonTransition : TTransition, IEpsilonTransition<TState>
         {

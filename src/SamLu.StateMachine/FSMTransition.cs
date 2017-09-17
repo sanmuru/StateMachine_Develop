@@ -9,6 +9,37 @@ namespace SamLu.StateMachine
     /// <summary>
     /// 表示有限状态机的转换。
     /// </summary>
+    public class FSMTransition : ITransition
+    {
+        private IState target;
+        /// <summary>
+        /// 获取 <see cref="FSMTransition{TState}"/> 指向的状态。
+        /// </summary>
+        public virtual IState Target { get => this.target; }
+
+        /// <summary>
+        /// 将转换的目标设为指定状态。
+        /// </summary>
+        /// <param name="state">指定的状态。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 null 。</exception>
+        public virtual bool SetTarget(IState state)
+        {
+            if (state == null) throw new ArgumentNullException(nameof(state));
+
+            if (this.target == state)
+                return false;
+            else
+            {
+                this.target = state;
+                return true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 表示有限状态机的转换。
+    /// </summary>
     /// <typeparam name="TState">有限状态机的状态的类型。</typeparam>
     public class FSMTransition<TState> : ITransition<TState> where TState : IState
     {

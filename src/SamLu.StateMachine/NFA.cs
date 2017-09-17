@@ -18,7 +18,7 @@ namespace SamLu.StateMachine
         /// <param name="state">指定的状态。</param>
         /// <param name="epsilonTransition">要添加的 ε 转换。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        public virtual bool AttachTransition(IState state, IEpsilonTransition epsilonTransition) => this.AttachTransition(state, (ITransition)epsilonTransition);
+        public virtual bool AttachTransition(INFAState state, IEpsilonTransition epsilonTransition) => this.AttachTransition(state, (ITransition)epsilonTransition);
 
         /// <summary>
         /// 从 <see cref="NFA"/> 的一个指定状态移除指定 ε 转换。
@@ -26,7 +26,7 @@ namespace SamLu.StateMachine
         /// <param name="state">指定的状态。</param>
         /// <param name="epsilonTransition">要添加的 ε 转换。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        public virtual bool RemoveTransition(IState state, IEpsilonTransition epsilonTransition) => this.RemoveTransition(state, (ITransition)epsilonTransition);
+        public virtual bool RemoveTransition(INFAState state, IEpsilonTransition epsilonTransition) => this.RemoveTransition(state, (ITransition)epsilonTransition);
 
         /// <summary>
         /// 最小化 <see cref="NFA"/> 。
@@ -41,7 +41,7 @@ namespace SamLu.StateMachine
     /// 表示非确定的有限自动机。
     /// </summary>
     public class NFA<TState, TTransition, TEpsilonTransition> : FSM<TState, TTransition>, INFA<TState, TTransition, TEpsilonTransition>
-        where TState : IState<TTransition>
+        where TState : INFAState<TTransition, TEpsilonTransition>
         where TTransition : class, ITransition<TState>
         where TEpsilonTransition : TTransition, IEpsilonTransition<TState>
     {
@@ -70,9 +70,9 @@ namespace SamLu.StateMachine
         }
 
         #region INFA Implementation
-        bool INFA.AttachTransition(IState state, IEpsilonTransition epsilonTransition) => this.AttachTransition((TState)state, (TTransition)epsilonTransition);
+        bool INFA.AttachTransition(INFAState state, IEpsilonTransition epsilonTransition) => this.AttachTransition((TState)state, (TTransition)epsilonTransition);
 
-        bool INFA.RemoveTransition(IState state, IEpsilonTransition epsilonTransition) => this.RemoveTransition((TState)state, (TTransition)epsilonTransition);
+        bool INFA.RemoveTransition(INFAState state, IEpsilonTransition epsilonTransition) => this.RemoveTransition((TState)state, (TTransition)epsilonTransition);
         #endregion
     }
 }
