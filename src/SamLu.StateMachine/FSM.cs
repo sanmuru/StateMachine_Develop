@@ -65,7 +65,7 @@ namespace SamLu.StateMachine
 #pragma warning disable 1591
         protected virtual void this_StartStateChanged(object sender, ValueChangedEventArgs<IState> e)
         {
-            this.Transit(e.NewValue);
+            this.Transit(e.NewValue, null);
         }
 #pragma warning restore 1591
         #endregion
@@ -184,8 +184,15 @@ namespace SamLu.StateMachine
                     new ArgumentNullException(nameof(this.StartState))
                 );
 
-            this.Transit(this.StartState);
+            this.Transit(this.StartState, null);
         }
+
+        /// <summary>
+        /// <see cref="FSM"/> 的转换操作。此操作沿指定的转换进行。（默认的参数为此状态机本身）。
+        /// </summary>
+        /// <param name="transition">指定的转换。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
+        protected bool Transit(ITransition transition) => this.Transit(transition, this);
 
         /// <summary>
         /// <see cref="FSM"/> 的转换操作。此操作沿指定的转换进行，接受指定的参数。
@@ -200,18 +207,27 @@ namespace SamLu.StateMachine
 
             if (this.currentState.RecurGetReachableTransitions().Contains(transition) && this.States.Contains(transition.Target))
             {
-                return this.Transit(transition.Target, args);
+                return this.Transit(transition.Target, transition, args);
             }
             else return false;
         }
 
         /// <summary>
+        /// <see cref="FSM"/> 的转换操作。此操作将使有限状态机模型的 <see cref="CurrentState"/> 转换为指定的状态。（默认的参数为此状态机本身）。
+        /// </summary>
+        /// <param name="state">指定的状态。</param>
+        /// <param name="transition">指定的转换。若转换操作非正常逻辑转换，应设为 null 。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
+        protected bool Transit(IState state, ITransition transition) => this.Transit(state, transition, this);
+
+        /// <summary>
         /// <see cref="FSM"/> 的转换操作。此操作将使有限状态机模型的 <see cref="CurrentState"/> 转换为指定的状态，接受指定的参数。
         /// </summary>
         /// <param name="state">指定的状态。</param>
+        /// <param name="transition">指定的转换。若转换操作非正常逻辑转换，应设为 null 。</param>
         /// <param name="args">指定的参数。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        protected virtual bool Transit(IState state, params object[] args)
+        protected virtual bool Transit(IState state, ITransition transition, params object[] args)
         {
             // 引发退出动作。
             this.CurrentState?.ExitAction?.Invoke(this.CurrentState);
@@ -220,7 +236,7 @@ namespace SamLu.StateMachine
             this.CurrentState = state;
 
             // 引发转换动作。
-            this.CurrentState?.TransitAction?.Invoke(this.CurrentState, args);
+            transition?.TransitAction?.Invoke(transition, args);
 
             // 引发进入动作。
             state?.EntryAction?.Invoke(state);
@@ -316,7 +332,7 @@ namespace SamLu.StateMachine
 #pragma warning disable 1591
         protected virtual void this_StartStateChanged(object sender, ValueChangedEventArgs<TState> e)
         {
-            this.Transit(e.NewValue);
+            this.Transit(e.NewValue, default(TTransition));
         }
 #pragma warning restore 1591
         #endregion
@@ -426,8 +442,15 @@ namespace SamLu.StateMachine
                     new ArgumentNullException(nameof(this.StartState))
                 );
 
-            this.Transit(this.StartState);
+            this.Transit(this.StartState, default(TTransition));
         }
+
+        /// <summary>
+        /// <see cref="FSM{TState, TTransition}"/> 的转换操作。此操作沿指定的转换进行。（默认的参数为此状态机本身）。
+        /// </summary>
+        /// <param name="transition">指定的转换。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
+        protected bool Transit(TTransition transition) => this.Transit(transition, this);
 
         /// <summary>
         /// <see cref="FSM{TState, TTransition}"/> 的转换操作。此操作沿指定的转换进行，接受指定的参数。
@@ -439,18 +462,27 @@ namespace SamLu.StateMachine
         {
             if (this.CurrentState.RecurGetReachableTransitions<TState, TTransition>().Contains(transition) && this.States.Contains(transition.Target))
             {
-                return this.Transit(transition.Target, args);
+                return this.Transit(transition.Target, transition, args);
             }
             else return false;
         }
 
         /// <summary>
+        /// <see cref="FSM{TState, TTransition}"/> 的转换操作。此操作将使有限状态机模型的 <see cref="CurrentState"/> 转换为指定的状态。（默认的参数为此状态机本身）。
+        /// </summary>
+        /// <param name="state">指定的状态。</param>
+        /// <param name="transition">指定的转换。若转换操作非正常逻辑转换，应设为 null 。</param>
+        /// <returns>一个值，指示操作是否成功。</returns>
+        protected bool Transit(TState state, TTransition transition) => this.Transit(state, transition, this);
+
+        /// <summary>
         /// <see cref="FSM{TState, TTransition}"/> 的转换操作。此操作将使有限状态机模型的 <see cref="CurrentState"/> 转换为指定的状态，接受指定的参数。
         /// </summary>
         /// <param name="state">指定的状态。</param>
+        /// <param name="transition">指定的转换。若转换操作非正常逻辑转换，应设为 null 。</param>
         /// <param name="args">指定的参数。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        protected virtual bool Transit(TState state, params object[] args)
+        protected virtual bool Transit(TState state, TTransition transition, params object[] args)
         {
             // 引发退出动作。
             this.CurrentState?.ExitAction?.Invoke(this.CurrentState);
@@ -459,7 +491,7 @@ namespace SamLu.StateMachine
             this.CurrentState = state;
 
             // 引发转换动作。
-            this.CurrentState?.TransitAction?.Invoke(this.CurrentState, args);
+            transition?.TransitAction?.Invoke(transition, args);
 
             // 引发进入动作。
             state?.EntryAction?.Invoke(state);
@@ -479,7 +511,7 @@ namespace SamLu.StateMachine
             if ((object)input is TTransition transition)
                 return this.Transit(transition);
             else if ((object)input is TState state)
-                return this.Transit(state, null);
+                return this.Transit(state, default(TTransition));
             else
                 throw new ArgumentOutOfRangeException(
                     nameof(input),
@@ -491,7 +523,7 @@ namespace SamLu.StateMachine
         #region IFSM, IFSM{TState, TTransition} Implementation
         IState IFSM.CurrentState => this.CurrentState;
 
-        IState IFSM.StartState => this.StartState;
+        IState IFSM.StartState { get => this.StartState; set => this.StartState = (TState)value; }
 
         ICollection<IState> IFSM.States => new ReadOnlyCollection<IState>(this.States.Cast<IState>().ToList());
 

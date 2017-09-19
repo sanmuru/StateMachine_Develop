@@ -17,6 +17,11 @@ namespace SamLu.StateMachine
         IState Target { get; }
 
         /// <summary>
+        /// 获取或设置表示 <see cref="ITransition"/> 的转换动作。在转换转换时进行。
+        /// </summary>
+        IAction TransitAction { get; set; }
+
+        /// <summary>
         /// 将转换的目标设为指定状态。
         /// </summary>
         /// <param name="state">指定的状态。</param>

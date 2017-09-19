@@ -84,7 +84,7 @@ namespace SamLu.StateMachine.EventDriven
                 return this.moduleBuilder;
             }
         }
-
+        
         /// <summary>
         /// 初始化 <see cref="EventDrivenFSMTransition"/> 类的新实例。
         /// </summary>

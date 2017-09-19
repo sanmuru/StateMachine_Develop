@@ -13,9 +13,14 @@ namespace SamLu.StateMachine
     {
         private IState target;
         /// <summary>
-        /// 获取 <see cref="FSMTransition{TState}"/> 指向的状态。
+        /// 获取 <see cref="FSMTransition"/> 指向的状态。
         /// </summary>
         public virtual IState Target { get => this.target; }
+
+        /// <summary>
+        /// 获取或设置表示 <see cref="FSMTransition"/> 的转换动作。在转换转换时进行。
+        /// </summary>
+        public IAction TransitAction { get; set; }
 
         /// <summary>
         /// 将转换的目标设为指定状态。
@@ -48,6 +53,11 @@ namespace SamLu.StateMachine
         /// 获取 <see cref="FSMTransition{TState}"/> 指向的状态。
         /// </summary>
         public virtual TState Target { get => this.target; }
+
+        /// <summary>
+        /// 获取或设置表示 <see cref="FSMTransition{TState}"/> 的转换动作。在转换转换时进行。
+        /// </summary>
+        public IAction TransitAction { get; set; }
 
         /// <summary>
         /// 将转换的目标设为指定状态。

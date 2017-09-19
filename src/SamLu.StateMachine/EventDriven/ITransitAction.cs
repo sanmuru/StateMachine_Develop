@@ -9,6 +9,7 @@ namespace SamLu.StateMachine.EventDriven
     /// <summary>
     /// 定义了有限状态机的转换状态的动作应遵循的基本约束。
     /// </summary>
+    [Obsolete("Use ITransition.TransitAction instead.", true)]
     public interface ITransitAction : IAction
     {
         /// <summary>
@@ -24,6 +25,7 @@ namespace SamLu.StateMachine.EventDriven
     /// 定义了有限状态机的转换状态的动作应遵循的基本约束。
     /// </summary>
     /// <typeparam name="TTransition">有限状态机的转换的类型。</typeparam>
+    [Obsolete("Use ITransition.TransitAction instead.", true)]
     public interface ITransitAction<in TTransition> : ITransitAction
         where TTransition : ITransition
     {

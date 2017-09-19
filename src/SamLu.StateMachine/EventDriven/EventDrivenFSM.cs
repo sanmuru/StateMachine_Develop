@@ -72,7 +72,7 @@ namespace SamLu.StateMachine.EventDriven
         /// <param name="state">指定的状态。</param>
         /// <param name="args">指定的参数。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
-        protected override bool Transit(EventDrivenFSMState state, params object[] args)
+        protected override bool Transit(EventDrivenFSMState state, EventDrivenFSMTransition transition, params object[] args)
         {
             // 引发退出动作。
             this.CurrentState?.ExitAction?.Invoke(this.CurrentState);
@@ -81,8 +81,8 @@ namespace SamLu.StateMachine.EventDriven
             this.CurrentState = state;
 
             // 引发转换动作。
-            this.CurrentState?.TransitAction?.Invoke(
-                this.CurrentState,
+            transition.TransitAction?.Invoke(
+                transition,
                 args?.FirstOrDefault(),
                 args?.Length == 0 ? null : args.Skip(1).ToArray()
             );

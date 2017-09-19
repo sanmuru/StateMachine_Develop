@@ -20,9 +20,9 @@ namespace SamLu.StateMachine
         IState CurrentState { get; }
 
         /// <summary>
-        /// 获取 <see cref="IFSM"/> 的起始状态。
+        /// 获取或设置 <see cref="IFSM"/> 的起始状态。
         /// </summary>
-        IState StartState { get; }
+        IState StartState { get; set; }
 
         /// <summary>
         /// 获取 <see cref="IFSM"/> 的状态集。

@@ -14,32 +14,26 @@ namespace SamLu.StateMachine
     /// </summary>
     public interface IState
     {
-
         /// <summary>
         /// 获取或设置一个值，指示该有限自动机的状态是否为结束状态。
         /// </summary>
         bool IsTerminal { get; set; }
 
         /// <summary>
-        /// 获取表示 <see cref="IState"/> 的进入动作。在进入状态时进行。
+        /// 获取或设置表示 <see cref="IState"/> 的进入动作。在进入状态时进行。
         /// </summary>
-        IAction EntryAction { get; }
+        IAction EntryAction { get; set; }
 
         /// <summary>
-        /// 获取表示 <see cref="IState"/> 的退出动作。在退出状态时进行。
+        /// 获取或设置表示 <see cref="IState"/> 的退出动作。在退出状态时进行。
         /// </summary>
-        IAction ExitAction { get; }
+        IAction ExitAction { get; set; }
 
         /// <summary>
-        /// 获取表示 <see cref="IState"/> 的输入动作。依赖于当前状态和输入条件进行。
+        /// 获取或设置表示 <see cref="IState"/> 的输入动作。依赖于当前状态和输入条件进行。
         /// </summary>
-        IAction InputAction { get; }
-
-        /// <summary>
-        /// 获取表示 <see cref="IState"/> 的转换动作。在进行特定转换时进行。
-        /// </summary>
-        IAction TransitAction { get; }
-
+        IAction InputAction { get; set; }
+        
         /// <summary>
         /// 获取 <see cref="IState"/> 的转换集。
         /// </summary>

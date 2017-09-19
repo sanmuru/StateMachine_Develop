@@ -38,12 +38,7 @@ namespace SamLu.StateMachine
         /// 获取表示 <see cref="FSMState"/> 的输入动作。依赖于当前状态和输入条件进行。
         /// </summary>
         public IAction InputAction { get; set; }
-
-        /// <summary>
-        /// 获取表示 <see cref="FSMState"/> 的转换动作。在进行特定转换时进行。
-        /// </summary>
-        public IAction TransitAction { get; set; }
-
+        
         /// <summary>
         /// 初始化 <see cref="FSMState"/> 类的新实例。
         /// </summary>
@@ -124,12 +119,7 @@ namespace SamLu.StateMachine
         /// 获取表示 <see cref="FSMState{TTransition}"/> 的输入动作。依赖于当前状态和输入条件进行。
         /// </summary>
         public IAction InputAction { get; set; }
-
-        /// <summary>
-        /// 获取表示 <see cref="FSMState{TTransition}"/> 的转换动作。在进行特定转换时进行。
-        /// </summary>
-        public IAction TransitAction { get; set; }
-
+        
         /// <summary>
         /// 初始化 <see cref="FSMState{TTransition}"/> 类的新实例。
         /// </summary>

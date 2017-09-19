@@ -13,23 +13,6 @@ namespace SamLu.StateMachine.EventDriven
     public class EventDrivenFSMState : FSMState<EventDrivenFSMTransition>
     {
         /// <summary>
-        /// 获取表示 <see cref="EventDrivenFSMState"/> 的转换动作。在进行特定转换时进行。
-        /// </summary>
-        new public ITransitAction<EventDrivenFSMTransition> TransitAction
-        {
-            get => base.TransitAction as ITransitAction<EventDrivenFSMTransition>;
-            set => base.TransitAction = value;
-        }
-
-        /// <summary>
-        /// 获取 <see cref="EventDrivenFSMState"/> 的转换集。
-        /// </summary>
-        public sealed override ICollection<EventDrivenFSMTransition> Transitions =>
-            base.Transitions.IsReadOnly?
-                base.Transitions :
-                new ReadOnlyCollection<EventDrivenFSMTransition>(base.Transitions.ToList());
-
-        /// <summary>
         /// 添加指定的转换。
         /// </summary>
         /// <param name="transition">要添加的转换。</param>
