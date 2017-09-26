@@ -20,7 +20,7 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 获取或设置表示 <see cref="FSMTransition"/> 的转换动作。在转换转换时进行。
         /// </summary>
-        public IAction TransitAction { get; set; }
+        public virtual IAction TransitAction { get; set; }
 
         /// <summary>
         /// 将转换的目标设为指定状态。
@@ -57,7 +57,7 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 获取或设置表示 <see cref="FSMTransition{TState}"/> 的转换动作。在转换转换时进行。
         /// </summary>
-        public IAction TransitAction { get; set; }
+        public virtual IAction TransitAction { get; set; }
 
         /// <summary>
         /// 将转换的目标设为指定状态。

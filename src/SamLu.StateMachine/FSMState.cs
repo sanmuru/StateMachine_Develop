@@ -17,7 +17,7 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 获取或设置一个值，指示该有限自动机的状态是否为结束状态。
         /// </summary>
-        public bool IsTerminal { get; set; }
+        public virtual bool IsTerminal { get; set; }
 
         /// <summary>
         /// 获取 <see cref="FSMState"/> 的转换集。
@@ -27,17 +27,17 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 获取表示 <see cref="FSMState"/> 的进入动作。在进入状态时进行
         /// </summary>
-        public IAction EntryAction { get; set; }
+        public virtual IAction EntryAction { get; set; }
 
         /// <summary>
         /// 获取表示 <see cref="FSMState"/> 的退出动作。在退出状态时进行。
         /// </summary>
-        public IAction ExitAction { get; set; }
+        public virtual IAction ExitAction { get; set; }
 
         /// <summary>
         /// 获取表示 <see cref="FSMState"/> 的输入动作。依赖于当前状态和输入条件进行。
         /// </summary>
-        public IAction InputAction { get; set; }
+        public virtual IAction InputAction { get; set; }
         
         /// <summary>
         /// 初始化 <see cref="FSMState"/> 类的新实例。
