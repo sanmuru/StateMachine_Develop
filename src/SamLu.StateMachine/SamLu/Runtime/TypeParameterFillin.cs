@@ -6,20 +6,58 @@ using System.Threading.Tasks;
 
 namespace SamLu.Runtime
 {
+    /// <summary>
+    /// 在 <see cref="TypeMaker"/> 中表示类型的填补位。
+    /// </summary>
     public enum TypeParameterFillin
     {
+        /// <summary>
+        /// 表示修饰的类型。
+        /// </summary>
         ModifiedType = 0,
-        TypeParameter_0 = 1,
-        TypeParameter_1 = 2,
-        TypeParameter_2 = 3,
-        TypeParameter_3 = 4,
-        TypeParameter_4 = 5,
-        TypeParameter_5 = 6,
-        TypeParameter_6 = 7,
-        TypeParameter_7 = 8,
-        TypeParameter_8 = 9,
-        TypeParameter_9 = 10,
-        TypeParameter_10 = 11,
-        TypeParameter_11 = 12
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第一个泛型参数。
+        /// </summary>
+        TypeParameter_1 = 1,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第二个泛型参数。
+        /// </summary>
+        TypeParameter_2 = 2,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第三个泛型参数。
+        /// </summary>
+        TypeParameter_3 = 3,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第四个泛型参数。
+        /// </summary>
+        TypeParameter_4 = 4,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第五个泛型参数。
+        /// </summary>
+        TypeParameter_5 = 5,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第六个泛型参数。
+        /// </summary>
+        TypeParameter_6 = 6,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第七个泛型参数。
+        /// </summary>
+        TypeParameter_7 = 7,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第八个泛型参数。
+        /// </summary>
+        TypeParameter_8 = 8,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第九个泛型参数。
+        /// </summary>
+        TypeParameter_9 = 9,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第十个泛型参数。
+        /// </summary>
+        TypeParameter_10 = 10,
+        /// <summary>
+        /// 如果修饰的类型是泛型类型，表示其第十一个泛型参数。
+        /// </summary>
+        TypeParameter_11 = 11
     }
 }
