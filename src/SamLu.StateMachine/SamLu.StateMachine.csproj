@@ -52,6 +52,7 @@
     <Compile Include="Adapter\ITransitionAdapter.cs" />
     <Compile Include="DFA.cs" />
     <Compile Include="DFAState.cs" />
+    <Compile Include="IDFAState.cs" />
     <Compile Include="SamLu\Diagnostics\CustomizedDebugInfo.cs" />
     <Compile Include="SamLu\Diagnostics\DebugInfoProxyAttribute.cs" />
     <Compile Include="Diagnostics\EpsilonTransitionDebugInfo.cs" />

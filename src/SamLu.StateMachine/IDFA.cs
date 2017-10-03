@@ -17,7 +17,7 @@ namespace SamLu.StateMachine
     /// <typeparam name="TState">确定的有限自动机的状态的类型。</typeparam>
     /// <typeparam name="TTransition">确定的有限自动机的转换的类型。</typeparam>
     public interface IDFA<TState, TTransition> : IDFA, IFSM<TState, TTransition>
-        where TState : IState<TTransition>
+        where TState : IDFAState<TTransition>
         where TTransition : ITransition<TState>
     { }
 }

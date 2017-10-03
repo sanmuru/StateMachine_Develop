@@ -25,7 +25,7 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 将转换的目标设为指定状态。
         /// </summary>
-        /// <param name="state">指定的状态。</param>
+        /// <param name="state">要设为目标的状态。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 null 。</exception>
         public virtual bool SetTarget(IState state)
@@ -62,7 +62,7 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 将转换的目标设为指定状态。
         /// </summary>
-        /// <param name="state">指定的状态。</param>
+        /// <param name="state">要设为目标的状态。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
         public virtual bool SetTarget(TState state)
         {

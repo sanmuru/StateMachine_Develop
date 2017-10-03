@@ -72,5 +72,11 @@ namespace SamLu.StateMachine
         /// <param name="epsilonTransition">要添加的 ε 转换。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
         public virtual bool RemoveTransition(TEpsilonTransition epsilonTransition) => base.RemoveTransition(epsilonTransition);
+
+        #region INFAState Implementation
+        bool INFAState.AttachTransition(IEpsilonTransition epsilonTransition) => this.AttachTransition((TEpsilonTransition)epsilonTransition);
+
+        bool INFAState.RemoveTransition(IEpsilonTransition epsilonTransition) => this.RemoveTransition((TEpsilonTransition)epsilonTransition);
+        #endregion
     }
 }

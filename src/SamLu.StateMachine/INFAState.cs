@@ -33,7 +33,7 @@ namespace SamLu.StateMachine
     /// </summary>
     /// <typeparam name="TTransition">非确定的有限自动机的转换的类型。</typeparam>
     /// <typeparam name="TEpsilonTransition">非确定的有限自动机的 ε 转换的类型。</typeparam>
-    public interface INFAState<TTransition, TEpsilonTransition> : IState<TTransition>
+    public interface INFAState<TTransition, TEpsilonTransition> : INFAState, IState<TTransition>
         where TTransition : class, ITransition
         where TEpsilonTransition : TTransition, IEpsilonTransition
     {

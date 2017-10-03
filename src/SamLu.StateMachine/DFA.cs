@@ -52,7 +52,7 @@ namespace SamLu.StateMachine
     /// 表示确定的有限自动机。
     /// </summary>
     public class DFA<TState, TTransition> : FSM<TState, TTransition>, IDFA<TState, TTransition>
-        where TState : IState<TTransition>
+        where TState : IDFAState<TTransition>
         where TTransition : ITransition<TState>
     {
         /// <summary>

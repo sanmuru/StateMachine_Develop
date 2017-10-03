@@ -58,7 +58,7 @@ namespace SamLu.StateMachine
         /// 将 <see cref="IFSM"/> 的一个指定转换的目标设为指定状态。
         /// </summary>
         /// <param name="transition">指定的目标。</param>
-        /// <param name="state">指定的状态。</param>
+        /// <param name="state">要设为目标的状态。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 null 。</exception>
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 null 。</exception>
@@ -130,7 +130,7 @@ namespace SamLu.StateMachine
         /// 将 <see cref="IFSM{TState, TTransition}"/> 的一个指定转换的目标设为指定状态。
         /// </summary>
         /// <param name="transition">指定的目标。</param>
-        /// <param name="state">指定的状态。</param>
+        /// <param name="state">要设为目标的状态。</param>
         /// <returns>一个值，指示操作是否成功。</returns>
         bool SetTarget(TTransition transition, TState state);
     }
