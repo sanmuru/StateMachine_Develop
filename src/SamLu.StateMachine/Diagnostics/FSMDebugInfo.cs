@@ -16,14 +16,14 @@ namespace SamLu.StateMachine.Diagnostics
         {
             get
             {
-                var states = this.fsm.States.ToList();
+                var states = this.fsm.States;
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("StartState: ({0}), total: {1}{2}", this.fsm.StartState.GetDebugInfo(states), states.Count, Environment.NewLine);
+                sb.AppendFormat("StartState: ({0}), CurrentState: ({1}), total: {2}{3}", this.fsm.StartState.GetDebugInfo(this.fsm, states), this.fsm.CurrentState.GetDebugInfo(this.fsm, states), states.Count, Environment.NewLine);
                 sb.Append(string.Join(
                     Environment.NewLine,
                     (from state in states
                      from transition in state.Transitions
-                     select string.Format("  ({0}) --{1}-> ({2})", state.GetDebugInfo(states), transition.GetDebugInfo(), transition.Target.GetDebugInfo(states))
+                     select string.Format("  ({0}) --{1}-> ({2})", state.GetDebugInfo(this.fsm, states), transition.GetDebugInfo(this.fsm), transition.Target.GetDebugInfo(this.fsm, states))
                     ).ToArray()
                 ));
 

@@ -16,8 +16,7 @@ namespace SamLu.StateMachine.Diagnostics
         {
             get
             {
-                if (this.states == null) return this.state.ToString();
-                else return string.Format(
+                return string.Format(
                     this.state.IsTerminal ? "({0})" : "{0}",
                     this.states.IndexOf(this.state).ToString()
                 );
@@ -29,14 +28,11 @@ namespace SamLu.StateMachine.Diagnostics
             if (state == null) throw new ArgumentNullException(nameof(state));
 
             this.state = state;
-            if (args != null && args.Length >= 1 && args[0] is IEnumerable<IState> states)
-                this.states = new List<IState>(states);
-            else
-                this.states = null;
+            this.states = new List<IState>((IEnumerable<IState>)args[1]);
         }
     }
 
-    [Obsolete("User none-generic-type FSMStateDebugInfo instead.", true)]
+    [Obsolete("User non-generic-type FSMStateDebugInfo instead.", true)]
     public class FSMStateDebugInfo<TState>
         where TState : IState
     {
@@ -47,8 +43,7 @@ namespace SamLu.StateMachine.Diagnostics
         {
             get
             {
-                if (this.states == null) return this.state.ToString();
-                else return string.Format(
+                return string.Format(
                     this.state.IsTerminal ? "({0})" : "{0}",
                     this.states.IndexOf(this.state).ToString()
                 );
@@ -60,9 +55,7 @@ namespace SamLu.StateMachine.Diagnostics
             if (state == null) throw new ArgumentNullException(nameof(state));
 
             this.state = state;
-            if (args != null && args.Length >= 1 && args[0] is IList<TState> states)
-                this.states = states;
-            else this.states = null;
+            this.states = new List<TState>((IEnumerable<TState>)args[1]);
         }
     }
 }
