@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace SamLu.Diagnostics
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface, AllowMultiple =false, Inherited = true)]
+    [AttributeUsage(
+            AttributeTargets.Class |
+            AttributeTargets.Struct |
+            AttributeTargets.Enum |
+            AttributeTargets.Interface |
+            AttributeTargets.Delegate,
+        AllowMultiple = false, Inherited = true)]
     public class DebugInfoProxyAttribute : Attribute
     {
         private Type proxyType;
         private object[] typeFragments;
-        
+
         public DebugInfoProxyAttribute(Type proxyType, TypeParameterFillin[] fillins) : this(proxyType, fillins.Cast<object>().ToArray()) { }
 
         public DebugInfoProxyAttribute(Type proxyType, params object[] typeFragments)
@@ -35,11 +41,16 @@ namespace SamLu.Diagnostics
 
         public Type MakeProxyType(Type modelType)
         {
+            return this.GetProxyTypeMaker().Make(modelType);
+        }
+
+        public TypeMaker GetProxyTypeMaker()
+        {
             object[] typeFragments = new object[this.typeFragments.Length + 1];
             typeFragments[0] = this.proxyType;
             this.typeFragments.CopyTo(typeFragments, 1);
 
-            return new TypeMaker(modelType, typeFragments).Make();
+            return new TypeMaker(typeFragments);
         }
     }
 }

@@ -10,6 +10,8 @@ namespace SamLu.Runtime
     {
         private Type[] typeFragments;
 
+        public object[] Fragments { get; }
+
         public TypeMaker(Type modelType, params object[] typeFragments)
         {
             if (modelType == null) throw new ArgumentNullException(nameof(modelType));
@@ -35,6 +37,7 @@ namespace SamLu.Runtime
             this.typeFragments = typeFragments;
         }
 
+        [Obsolete("", true)]
         public Type Make()
         {
             Stack<Type> typeStack = new Stack<Type>();
