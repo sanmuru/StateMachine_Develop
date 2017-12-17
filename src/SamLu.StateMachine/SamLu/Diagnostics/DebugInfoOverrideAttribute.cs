@@ -21,6 +21,9 @@ namespace SamLu.Diagnostics
         private Type debugInfoType;
         private object[] debugInfoParameters = null;
 
+        private Type proxyType;
+        private object[] proxyTypeParameters;
+
         public object[] DebugInfoParameters { get => this.debugInfoParameters; set => this.debugInfoParameters = value; }
         public string DebugInfoParametersFieldName { get; set; }
 
@@ -34,8 +37,22 @@ namespace SamLu.Diagnostics
 
         }
 
-        public TypeMaker GetDebugInfoTypeMaker() { }
+        public TypeMaker GetDebugInfoTypeMaker()
+        {
+            object[] segments = new object[this.debugInfoParameters.Length + 1];
+            segments[0] = this.debugInfoType;
+            this.debugInfoParameters.CopyTo(segments, 1);
 
-        public TypeMaker GetProxyTypeMaker() { }
+            return new TypeMaker(this.debugInfoType, segments);
+        }
+
+        public TypeMaker GetProxyTypeMaker()
+        {
+            object[] segments = new object[this.proxyTypeParameters.Length + 1];
+            segments[0] = this.proxyType;
+            this.proxyTypeParameters.CopyTo(segments, 1);
+
+            return new TypeMaker(this.proxyType, segments);
+        }
     }
 }

@@ -16,14 +16,14 @@ namespace SamLu.Diagnostics
                 if (object.ReferenceEquals(x, y)) return true;
                 else if (x == null | y == null) return false;
                 else
-                    return (x.Fragments ?? new object[0]).SequenceEqual(y.Fragments ?? new object[0]);
+                    return (x.Segments ?? new object[0]).SequenceEqual(y.Segments ?? new object[0]);
             }
 
             public override int GetHashCode(TypeMaker obj)
             {
-                if (obj == null || obj.Fragments == null) return 0;
+                if (obj == null || obj.Segments == null) return 0;
                 else
-                    return obj.Fragments
+                    return obj.Segments
                         .Select(fragment => fragment == null ? 0 : fragment.GetHashCode())
                         .Aggregate(0, ((hc1, hc2) => hc1 ^ hc2));
             }
@@ -47,7 +47,7 @@ namespace SamLu.Diagnostics
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
             
-            base.Add(new TypeMaker(key), setting);
+            base.Add(new TypeMaker(new object[] { key }), setting);
         }
 
         public bool ContainsKey(Type key)

@@ -17,14 +17,14 @@ namespace SamLu.Diagnostics
     public class DebugInfoProxyAttribute : Attribute
     {
         private Type proxyType;
-        private object[] typeFragments;
+        private object[] typeSegments;
 
         public DebugInfoProxyAttribute(Type proxyType, TypeParameterFillin[] fillins) : this(proxyType, fillins.Cast<object>().ToArray()) { }
 
-        public DebugInfoProxyAttribute(Type proxyType, params object[] typeFragments)
+        public DebugInfoProxyAttribute(Type proxyType, params object[] typeSegments)
         {
             if (proxyType == null) throw new ArgumentNullException(nameof(proxyType));
-            if (typeFragments == null) throw new ArgumentNullException(nameof(typeFragments));
+            if (typeSegments == null) throw new ArgumentNullException(nameof(typeSegments));
 
             if (proxyType.IsAbstract)
                 throw new NotSupportedException($"{proxyType} 不支持获取调试信息。");
@@ -36,7 +36,7 @@ namespace SamLu.Diagnostics
             }
 
             this.proxyType = proxyType;
-            this.typeFragments = typeFragments;
+            this.typeSegments = typeSegments;
         }
 
         public Type MakeProxyType(Type modelType)
@@ -46,11 +46,11 @@ namespace SamLu.Diagnostics
 
         public TypeMaker GetProxyTypeMaker()
         {
-            object[] typeFragments = new object[this.typeFragments.Length + 1];
-            typeFragments[0] = this.proxyType;
-            this.typeFragments.CopyTo(typeFragments, 1);
+            object[] typeSegments = new object[this.typeSegments.Length + 1];
+            typeSegments[0] = this.proxyType;
+            this.typeSegments.CopyTo(typeSegments, 1);
 
-            return new TypeMaker(typeFragments);
+            return new TypeMaker(typeSegments);
         }
     }
 }

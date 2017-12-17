@@ -32,7 +32,10 @@
     <DocumentationFile>bin\Release\SamLu.StateMachine.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PublicKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -68,6 +71,9 @@
     <Compile Include="SamLu\Runtime\InheritLevel.cs" />
     <Compile Include="SamLu\Runtime\TypeDeduction.cs" />
     <Compile Include="SamLu\Runtime\TypeDeductionLevel.cs" />
+    <Compile Include="SamLu\Runtime\TypeMakeException.cs" />
+    <Compile Include="SamLu\Runtime\TypeMakeInvalidSegmentException.cs" />
+    <Compile Include="SamLu\Runtime\TypeMakeSegmentNullException.cs" />
     <Compile Include="SamLu\Runtime\TypeParameterFillin.cs" />
     <Compile Include="EventDriven\EventDrivenFSM.cs" />
     <Compile Include="EventDriven\EventDrivenFSMEpsilonTransition.cs" />
@@ -100,6 +106,8 @@
     <Compile Include="System\Collections\Generic\EqualityComparisonComparer.cs" />
     <Compile Include="System\EqualityComparison.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="PublicKey.snk" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

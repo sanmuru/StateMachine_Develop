@@ -150,7 +150,7 @@ namespace SamLu.Diagnostics
                 // 通过 overrideAttr 生成 proxyType;
                 proxyType = (proxyType = null) ?? throw new NotImplementedException();
 
-            return DebugInfo.GetDebugInfoInternal(t, tType, proxyType);
+            return DebugInfo.GetDebugInfoInternal(t, proxyType, args);
         }
 
         public static string GetDebugInfo<T>(this T t, Type proxyType, params object[] args)
