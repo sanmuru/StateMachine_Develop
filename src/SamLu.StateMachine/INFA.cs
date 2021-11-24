@@ -15,7 +15,9 @@ namespace SamLu.StateMachine
         /// 最小化，以转化为确定的有限状态机。
         /// </summary>
         /// <returns>转化得到的确定的有限状态机。</returns>
-        IDFA Optimize();
+        void Optimize();
+
+        IDFA Determine(IInputSet inputSet);
     }
 
     /// <inheritdoc cref="INFA"/>
@@ -23,10 +25,9 @@ namespace SamLu.StateMachine
     /// <typeparam name="TState">状态的类型。</typeparam>
     /// <typeparam name="TTransition">转换的类型。</typeparam>
     public interface INFA<TInput, TState, TTransition> : INFA, IFSM<TInput, TState, TTransition>
-        where TState : IStateGroupState<TTransition>
+        where TState : IState<TTransition>
         where TTransition : ITransition<TInput, TState>
     {
-        /// <inheritdoc cref="INFA.Optimize"/>
-        new IDFA<TInput, TState, TTransition> Optimize();
+        IDFA<TInput, TState, TTransition> Determine(IInputSet<TInput> inputSet);
     }
 }

@@ -28,6 +28,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="value"/> 的值为 <see langword="null"/> 。</exception>
         public virtual IState StartState
         {
+            get => this.startState ?? throw new UninitializedException("有限状态机未初始化。");
             set
             {
                 ArgumentNullException.ThrowIfNull(value, nameof(value));
@@ -68,6 +69,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="value"/> 的值为 <see langword="null"/> 。</exception>
         public virtual TState StartState
         {
+            get => this.startState ?? throw new UninitializedException("有限状态机未初始化。");
             set
             {
                 ArgumentNullException.ThrowIfNull(value, nameof(value));
@@ -79,7 +81,11 @@ namespace SamLu.StateMachine
 
         IState IFSM.CurrentState => this.CurrentState;
 
-        IState IFSM.StartState { set => this.StartState = (TState)value; }
+        IState IFSM.StartState
+        {
+            get => this.StartState;
+            set => this.StartState = (TState)value;
+        }
 
         /// <inheritdoc/>
         /// <exception cref="UninitializedException">有限状态机未初始化。</exception>

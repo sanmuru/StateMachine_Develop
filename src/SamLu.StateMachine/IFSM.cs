@@ -17,9 +17,9 @@ namespace SamLu.StateMachine
         IState CurrentState { get; }
 
         /// <summary>
-        /// 获取起始状态。
+        /// 获取或设置起始状态。
         /// </summary>
-        IState StartState { set; }
+        IState StartState { get; set; }
 
         /// <summary>
         /// 接受一个指定输入并进行转换。返回一个值，指示操作是否成功。
@@ -46,7 +46,7 @@ namespace SamLu.StateMachine
         new TState CurrentState { get; }
 
         /// <inheritdoc cref="IFSM.StartState"/>
-        new TState StartState { set; }
+        new TState StartState { get; set; }
 
         /// <inheritdoc cref="IFSM.Transit(object)"/>
         bool Transit(TInput? input);

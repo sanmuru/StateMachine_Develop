@@ -31,7 +31,7 @@ namespace SamLu.StateMachine
         {
             ArgumentNullException.ThrowIfNull(state, nameof(state));
 
-            if (this.target is not null && this.target.Equals(state))
+            if (this.target is not null && object.Equals(this.target, state))
                 return false;
             else
             {
@@ -68,7 +68,7 @@ namespace SamLu.StateMachine
         {
             ArgumentNullException.ThrowIfNull(state, nameof(state));
 
-            if (this.target is not null && this.target.Equals(state))
+            if (this.target is not null && object.Equals(this.target, state))
                 return false;
             else
             {
