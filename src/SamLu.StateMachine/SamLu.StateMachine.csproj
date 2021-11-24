@@ -1,113 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{23A9B2DF-A5FF-4199-BC87-5EC50EDFB3B3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SamLu.StateMachine</RootNamespace>
-    <AssemblyName>SamLu.StateMachine</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>sanmuru</Authors>
+    <BaseOutputPath>$(SolutionDir)..\bin</BaseOutputPath>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile></DocumentationFile>
+    <SignAssembly>False</SignAssembly>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\SamLu.StateMachine.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\SamLu.StateMachine.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PublicKey.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Action.cs" />
-    <Compile Include="Adapter\FSMAdapter.cs" />
-    <Compile Include="Adapter\IFSMAdapter.cs" />
-    <Compile Include="Adapter\IStateAdapter.cs" />
-    <Compile Include="Adapter\ITransitionAdapter.cs" />
-    <Compile Include="DFA.cs" />
-    <Compile Include="DFAState.cs" />
-    <Compile Include="IDFAState.cs" />
-    <Compile Include="SamLu\Diagnostics\CharDebugInfo.cs" />
-    <Compile Include="SamLu\Diagnostics\CustomizedDebugInfo.cs" />
-    <Compile Include="SamLu\Diagnostics\DebugInfoOverrideAttribute.cs" />
-    <Compile Include="SamLu\Diagnostics\DebugInfoProxyAttribute.cs" />
-    <Compile Include="Diagnostics\EpsilonTransitionDebugInfo.cs" />
-    <Compile Include="Diagnostics\FSMDebugInfo.cs" />
-    <Compile Include="Diagnostics\FSMStateDebugInfo.cs" />
-    <Compile Include="SamLu\Diagnostics\DebugInfoSetting.cs" />
-    <Compile Include="SamLu\Diagnostics\DebugInfoSettings.cs" />
-    <Compile Include="SamLu\Diagnostics\IDebugInfo.cs" />
-    <Compile Include="SamLu\Diagnostics\DebugInfo.cs" />
-    <Compile Include="SamLu\Diagnostics\StringDebugInfo.cs" />
-    <Compile Include="SamLu\Runtime\InheritLevel.cs" />
-    <Compile Include="SamLu\Runtime\TypeDeduction.cs" />
-    <Compile Include="SamLu\Runtime\TypeDeductionLevel.cs" />
-    <Compile Include="SamLu\Runtime\TypeMakeException.cs" />
-    <Compile Include="SamLu\Runtime\TypeMakeInvalidSegmentException.cs" />
-    <Compile Include="SamLu\Runtime\TypeMakeSegmentNullException.cs" />
-    <Compile Include="SamLu\Runtime\TypeParameterFillin.cs" />
-    <Compile Include="EventDriven\EventDrivenFSM.cs" />
-    <Compile Include="EventDriven\EventDrivenFSMEpsilonTransition.cs" />
-    <Compile Include="EventDriven\EventDrivenFSMState.cs" />
-    <Compile Include="EventDriven\EventDrivenFSMTransition.cs" />
-    <Compile Include="EventDriven\EventInvokeEventArgs.cs" />
-    <Compile Include="EventDriven\EventInvokeEventHandler.cs" />
-    <Compile Include="EventDriven\ITransitAction.cs" />
-    <Compile Include="FSMUtility.cs" />
-    <Compile Include="FSM.cs" />
-    <Compile Include="FSMState.cs" />
-    <Compile Include="FSMTransition.cs" />
-    <Compile Include="IAction.cs" />
-    <Compile Include="IDFA.cs" />
-    <Compile Include="INFA.cs" />
-    <Compile Include="IEpsilonTransition.cs" />
-    <Compile Include="IFSM.cs" />
-    <Compile Include="INFAState.cs" />
-    <Compile Include="IState.cs" />
-    <Compile Include="ITransition.cs" />
-    <Compile Include="NFA.cs" />
-    <Compile Include="NFAState.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SamLu\CollectionChangedEventArgs.cs" />
-    <Compile Include="SamLu\CollectionChangingEventArgs.cs" />
-    <Compile Include="SamLu\Runtime\TypeMaker.cs" />
-    <Compile Include="SamLu\Runtime\TypeParameterReference.cs" />
-    <Compile Include="SamLu\ValueChangedEventArgs.cs" />
-    <Compile Include="SamLu\ValueChangingEventArgs.cs" />
-    <Compile Include="System\Collections\Generic\EqualityComparisonComparer.cs" />
-    <Compile Include="System\EqualityComparison.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PublicKey.snk" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
