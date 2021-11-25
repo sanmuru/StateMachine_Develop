@@ -18,7 +18,7 @@ namespace SamLu.StateMachine
         /// <inheritdoc/>
         public virtual void Optimize() => this.EpsilonClosure();
 
-        public virtual IDFA Determine(IInputSet inputSet)
+        public virtual IDFA Determine(IInputSymbols inputSet)
         {
             throw new NotImplementedException();
         }
@@ -38,11 +38,11 @@ namespace SamLu.StateMachine
 
         void INFA.Optimize() => this.Optimize();
 
-        public IDFA<TInput, TState, TTransition> Determine(IInputSet<TInput> inputSet)
+        public IDFA<TInput, TState, TTransition> Determine(IInputSymbols<TInput> inputSet)
         {
             throw new NotImplementedException();
         }
 
-        IDFA INFA.Determine(IInputSet inputSet) => this.Determine((IInputSet<TInput>)inputSet);
+        IDFA INFA.Determine(IInputSymbols inputSet) => this.Determine((IInputSymbols<TInput>)inputSet);
     }
 }

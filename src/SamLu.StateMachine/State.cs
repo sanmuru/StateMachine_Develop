@@ -27,7 +27,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public virtual bool AttachTransition(ITransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             return this.transitions.Add(transition);
         }
@@ -36,7 +36,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public bool RemoveTransition(ITransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             return this.transitions.Remove(transition);
         }
@@ -63,7 +63,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public virtual bool AttachTransition(TTransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             return this.transitions.Add(transition);
         }
@@ -74,7 +74,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public virtual bool RemoveTransition(TTransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             return this.transitions.Remove(transition);
         }

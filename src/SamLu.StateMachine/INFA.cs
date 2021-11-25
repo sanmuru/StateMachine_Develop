@@ -17,7 +17,7 @@ namespace SamLu.StateMachine
         /// <returns>转化得到的确定的有限状态机。</returns>
         void Optimize();
 
-        IDFA Determine(IInputSet inputSet);
+        IDFA Determine(IInputSymbols inputSet);
     }
 
     /// <inheritdoc cref="INFA"/>
@@ -28,6 +28,6 @@ namespace SamLu.StateMachine
         where TState : IState<TTransition>
         where TTransition : ITransition<TInput, TState>
     {
-        IDFA<TInput, TState, TTransition> Determine(IInputSet<TInput> inputSet);
+        IDFA<TInput, TState, TTransition> Determine(IInputSymbols<TInput> inputSet);
     }
 }

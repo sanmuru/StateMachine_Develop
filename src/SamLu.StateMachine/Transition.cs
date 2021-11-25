@@ -29,7 +29,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 <see langword="null"/> 。</exception>
         public virtual bool SetTarget(IState state)
         {
-            ArgumentNullException.ThrowIfNull(state, nameof(state));
+            ArgumentNullException.ThrowIfNull(state);
 
             if (this.target is not null && object.Equals(this.target, state))
                 return false;
@@ -66,7 +66,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="state"/> 的值为 <see langword="null"/> 。</exception>
         public bool SetTarget(TState state)
         {
-            ArgumentNullException.ThrowIfNull(state, nameof(state));
+            ArgumentNullException.ThrowIfNull(state);
 
             if (this.target is not null && object.Equals(this.target, state))
                 return false;

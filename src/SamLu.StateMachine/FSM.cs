@@ -31,7 +31,7 @@ namespace SamLu.StateMachine
             get => this.startState ?? throw new UninitializedException("有限状态机未初始化。");
             set
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 this.startState = value;
                 this.Reset();
@@ -72,7 +72,7 @@ namespace SamLu.StateMachine
             get => this.startState ?? throw new UninitializedException("有限状态机未初始化。");
             set
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 this.startState = value;
                 this.Reset();

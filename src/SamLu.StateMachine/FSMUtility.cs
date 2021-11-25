@@ -14,10 +14,9 @@ namespace SamLu.StateMachine
         /// <summary>
         /// 消除不确定的有限状态机中的所有 ε 闭包。
         /// </summary>
-        public static void EpsilonClosure(
-            this INFA nfa)
+        public static void EpsilonClosure( this INFA nfa)
         {
-            ArgumentNullException.ThrowIfNull(nfa, nameof(nfa));
+            ArgumentNullException.ThrowIfNull(nfa);
 
             if (nfa.StartState
                 .RecurGetTransitions()
@@ -76,7 +75,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="startState"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<IState> RecurGetStates(this IState startState)
         {
-            ArgumentNullException.ThrowIfNull(startState, nameof(startState));
+            ArgumentNullException.ThrowIfNull(startState);
 
             HashSet<IState> states = new();
             FSMUtility.RecurGetStatesInternal(startState, states);
@@ -93,7 +92,7 @@ namespace SamLu.StateMachine
         /// <exception cref="TargetNullException"><paramref name="transition"/> 指向的状态为 <see langword="null"/> 。</exception>
         public static IEnumerable<IState> RecurGetStates(this ITransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             if (transition.Target is null) throw new TargetNullException();
             return transition.Target.RecurGetStates();
@@ -121,7 +120,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="startState"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<ITransition> RecurGetTransitions(this IState startState)
         {
-            ArgumentNullException.ThrowIfNull(startState, nameof(startState));
+            ArgumentNullException.ThrowIfNull(startState);
 
             HashSet<ITransition> transitions = new();
             foreach (var transition in startState.Transitions)
@@ -138,7 +137,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<ITransition> RecurGetTransitions(this ITransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             HashSet<ITransition> transitions = new();
             FSMUtility.RecurGetTransitionsInternal(transition, transitions);
@@ -168,7 +167,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="startState"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<IState> RecurGetReachableStates(this IState startState)
         {
-            ArgumentNullException.ThrowIfNull(startState, nameof(startState));
+            ArgumentNullException.ThrowIfNull(startState);
 
             HashSet<IState> states = new();
             FSMUtility.RecurGetReachableStatesInternal(startState, states);
@@ -184,7 +183,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<IState> RecurGetReachableStates(this ITransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             if (transition.Target is null) throw new TargetNullException();
             HashSet<IState> states = new() { transition.Target };
@@ -214,7 +213,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="startState"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<ITransition> RecurGetReachableTransitions(this IState startState)
         {
-            ArgumentNullException.ThrowIfNull(startState, nameof(startState));
+            ArgumentNullException.ThrowIfNull(startState);
 
             HashSet<ITransition> transitions = new();
             foreach (var transition in startState.Transitions.Where(_transition => _transition is not null))
@@ -234,7 +233,7 @@ namespace SamLu.StateMachine
         /// <exception cref="ArgumentNullException"><paramref name="transition"/> 的值为 <see langword="null"/> 。</exception>
         public static IEnumerable<ITransition> RecurGetReachableTransitions(this ITransition transition)
         {
-            ArgumentNullException.ThrowIfNull(transition, nameof(transition));
+            ArgumentNullException.ThrowIfNull(transition);
 
             HashSet<ITransition> transitions = new();
             FSMUtility.RecurGetReachableTransitionsInternal(transition, transitions);

@@ -27,6 +27,7 @@ namespace SamLu.StateMachine
         /// 使用指定的状态集初始化实例。
         /// </summary>
         /// <param name="states">指定的状态集。</param>
+        /// <exception cref="ArgumentNullException"><paramref name="states"/> 的值为 <see langword="null"/> 。</exception>
         public UnionState(IEnumerable<IState> states) => this.states = states ?? throw new ArgumentNullException(nameof(states));
 
         IEnumerator<IState> IEnumerable<IState>.GetEnumerator() => this.states.GetEnumerator();
