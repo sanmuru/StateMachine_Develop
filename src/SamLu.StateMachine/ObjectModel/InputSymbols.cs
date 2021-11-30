@@ -267,58 +267,70 @@ namespace SamLu.StateMachine.ObjectModel
 
             // 此时， [from, to] 范围必定不会——在末尾或开头且不与输入符号集有共同元素。
             LinkedListNode<T?> deleteFrom, deleteTo;
+            bool changed = false;
             if (fromExists) // 下界位置位于已有范围内，则不需要插入边界，从位置所在范围的上界开始删除。
             {
                 deleteFrom = fromTo!;
+                changed |= false;
             }
             else if (fromFrom is null) // 下届位置位于开头，则需要插入边界，并从第一个范围的下界开始删除。
             {
                 deleteFrom = this.edges.First!;
                 this.edges.AddFirst(from);
+                changed |= true;
             }
             else if (this.NextTo(from, fromFrom.Value)) // 下界位置紧邻前方范围的上界，则不需要插入边界，从前方范围的上界开始删除。
             {
                 deleteFrom = fromFrom;
+                changed |= false;
             }
             else if (this.NextTo(from, fromTo!.Value)) // 下界位置紧邻后方范围的下界，则需要修改后方范围的下界，从后方范围的上界开始删除。
             {
                 deleteFrom = fromTo!.Next!;
                 fromTo!.Value = from;
+                changed |= true;
             }
             else // 下界位置不紧邻前、后方范围的边界，则需要插入边界，并从后方范围的下界开始删除。
             {
                 deleteFrom = fromTo;
                 this.edges.AddAfter(fromTo, from);
+                changed |= true;
             }
             if (toExists) // 上界位置位于已有范围内，则不需要插入边界，从位置所在范围的下界开始删除。
             {
                 deleteTo = toFrom!;
+                changed |= false;
             }
             else if (toTo is null) // 上界位置位于结尾，则需要插入边界，并从最后一个范围的上界开始删除。
             {
                 deleteTo = this.edges.Last!;
                 this.edges.AddLast(to);
+                changed |= true;
             }
             else if (this.NextTo(to, toTo.Value)) // 上界位置紧邻后方范围的下界，则不需要插入边界，从后方范围的下界开始删除。
             {
                 deleteTo = toTo;
+                changed |= false;
             }
             else if (this.NextTo(to, toFrom!.Value)) // 上界位置紧邻前方范围的上界，则需要修改前方范围的上界，从前方范围的下界开始删除。
             {
                 deleteTo = toFrom!.Next!;
                 toFrom!.Value = to;
+                changed |= true;
             }
             else // 上界位置不紧邻前、后方范围的边界，则需要插入边界，并从前方范围的上界开始删除。
             {
                 deleteTo = toFrom;
                 this.edges.AddBefore(toFrom, to);
+                changed |= true;
             }
 
             // 删除失效的边界。
-            if (this.Compare(deleteFrom.Value, deleteTo.Value) > 0) return false; // 没有失效的边界。
+            if (this.Compare(deleteFrom.Value, deleteTo.Value) > 0) return changed; // 没有失效的边界。
             for (var node = deleteFrom; node != deleteTo; node = node.Next!)
                 this.edges.Remove(node);
             this.edges.Remove(deleteTo);
+            return true;
         }
         public virtual bool Add(object? from, object? to) => this.Add((T?)from, (T?)to);
 
@@ -363,7 +375,52 @@ namespace SamLu.StateMachine.ObjectModel
             return true;
         }
         public virtual bool Remove([AllowNull] object item) => this.Remove((T?)item);
-        public virtual bool Remove(T? from, T? to);
+        public virtual bool Remove(T? from, T? to)
+        {
+            if (this.Compare(from, to) > 0) (from, to) = (to, from); // 调整为 (最小值, 最大值) 形式。
+
+            if (this.edges.Count == 0) return false;
+
+            var (fromExists, fromFrom, fromTo) = Find(from);
+            if (!fromExists && fromTo is null) // 若查询到的下界的位置不存在且在末尾。
+                return false;
+            var (toExists, toFrom, toTo) = Find(to, startNode: fromFrom);
+            if (!toExists && toFrom is null) // 若查询到的上界的位置不存在且在开头。
+                return false;
+
+            // 此时， [from, to] 范围必定不会——在末尾或开头且不与输入符号集有共同元素。
+            LinkedListNode<T?> deleteFrom, deleteTo;
+            bool changed = false;
+            if (fromExists) // 下界位置位于已有范围内，则需要插入边界，从位置所在范围的上界开始删除。
+            {
+                deleteFrom = fromTo!;
+                this.edges.AddAfter(fromTo!, this.Previous(from));
+                changed |= true;
+            }
+            else // 下届位置位于后方范围之前，则不需要插入边界，并从后方范围的下界开始删除。
+            {
+                deleteFrom = fromTo!;
+                changed |= false;
+            }
+            if (toExists) // 上界位置位于已有范围内，则需要插入边界，到位置所在范围的下界结束删除。
+            {
+                deleteTo = toFrom!;
+                this.edges.AddBefore(toFrom!, this.Next(to));
+                changed |= true;
+            }
+            else // 上界位置位于前方范围之后，则不需要插入边界，并到前方范围的上界结束删除。
+            {
+                deleteTo = toFrom!;
+                changed |= false;
+            }
+
+            // 删除失效的边界。
+            if (this.Compare(deleteFrom.Value, deleteTo.Value) > 0) return changed; // 没有失效的边界。
+            for (var node = deleteFrom; node != deleteTo; node = node.Next!)
+                this.edges.Remove(node);
+            this.edges.Remove(deleteTo);
+            return true;
+        }
         public virtual bool Remove(object? from, object? to) => this.Remove((T?)from, (T?)to);
 
         protected (bool exists, LinkedListNode<T?>? from, LinkedListNode<T?>? to) Find(T? item, LinkedListNode<T?>? startNode = null, LinkedListNode<T?>? endNode = null)

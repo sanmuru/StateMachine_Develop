@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamLu.StateMachine.ObjectModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,14 @@ namespace SamLu.StateMachine
             throw new NotImplementedException();
         }
 
-        IDFA INFA.Determine(IInputSymbols inputSet) => this.Determine((IInputSymbols<TInput>)inputSet);
+        IDFA<TInput, TState, TTransition> INFA<TInput, TState, TTransition>.Determine(IInputSymbols<TInput> inputSet)
+        {
+            throw new NotImplementedException();
+        }
+
+        IDFA INFA.Determine(IInputSymbols inputSet)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
