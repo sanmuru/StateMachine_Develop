@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/RegexTest/SamLu.RegularExpression.UnitTests.csproj" Id="7ab30bc1-378b-431a-8007-d62bb728b690" />
+  <Project Path="src/RegularExpression/SamLu.RegularExpression.csproj" />
+  <Project Path="src/StateMachine/SamLu.StateMachine.csproj" />
+</Solution>
