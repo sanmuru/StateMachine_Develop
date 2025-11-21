@@ -1,7 +1,6 @@
 ﻿using SamLu.RegularExpression.StateMachine;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace SamLu.RegularExpression;
 

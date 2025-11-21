@@ -1,4 +1,6 @@
-﻿namespace SamLu.StateMachine;
+﻿using System.Collections.Immutable;
+
+namespace SamLu.StateMachine;
 
 /// <summary>
 /// 定义了有限状态机的状态应遵循的基本约束。
@@ -13,7 +15,7 @@ public interface IState
     /// <summary>
     /// 获取状态的转换集。
     /// </summary>
-    ICollection<ITransition> Transitions { get; }
+    IReadOnlySet<ITransition> Transitions { get; }
 
     /// <summary>
     /// 添加指定的转换。
@@ -35,7 +37,7 @@ public interface IState
 public interface IState<TTransition> : IState where TTransition : ITransition
 {
     /// <inheritdoc cref="IState.Transitions"/>
-    new ICollection<TTransition> Transitions { get; }
+    new IReadOnlySet<TTransition> Transitions { get; }
 
     /// <inheritdoc cref="IState.AttachTransition(ITransition)"/>
     bool AttachTransition(TTransition transition);

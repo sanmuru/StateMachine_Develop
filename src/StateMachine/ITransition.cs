@@ -25,6 +25,9 @@ public interface ITransition
     /// <returns>一个值，指示操作是否成功。</returns>
     bool SetTarget(IState state);
 
+    /// <summary>
+    /// 获取触发此转换的输入条目集合。
+    /// </summary>
     ImmutableArray<InputEntry> InputEntries { get; }
 }
 
@@ -39,5 +42,6 @@ public interface ITransition<TInput, TState> : ITransition where TState : IState
     /// <inheritdoc cref="ITransition.SetTarget(IState)"/>
     bool SetTarget(TState state);
 
+    /// <inheritdoc cref="ITransition.InputEntries"/>
     new ImmutableArray<InputEntry<TInput>> InputEntries { get; }
 }

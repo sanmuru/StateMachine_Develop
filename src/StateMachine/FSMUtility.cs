@@ -1,6 +1,5 @@
 ﻿using SamLu.StateMachine.ObjectModel;
 using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 
 namespace SamLu.StateMachine;
 
@@ -64,15 +63,10 @@ public static class FSMUtility
         }
     }
 
-    internal sealed class UnionState : IEquatable<UnionState>
+    internal sealed class UnionState(IEnumerable<IState> innerStates) : IEquatable<UnionState>
     {
-        public ImmutableHashSet<IState> InnerStates { get; }
-        public HashSet<UnionTransition> Transitions { get; } = new();
-
-        public UnionState(IEnumerable<IState> innerStates)
-        {
-            this.InnerStates = innerStates.ToImmutableHashSet();
-        }
+        public ImmutableHashSet<IState> InnerStates { get; } = [.. innerStates];
+        public HashSet<UnionTransition> Transitions { get; } = [];
 
         public bool Equals(UnionState? other) => other is not null && this.InnerStates.SetEquals(other.InnerStates);
 
@@ -93,17 +87,11 @@ public static class FSMUtility
         }
     }
 
-    internal sealed class UnionTransition : IEquatable<UnionTransition>
+    internal sealed class UnionTransition(IEnumerable<InputEntry> inputEntries, IEnumerable<ITransition> innerTransitions) : IEquatable<UnionTransition>
     {
-        public ImmutableArray<InputEntry> InputEntries { get; }
-        public ImmutableHashSet<ITransition> InnerTransitions { get; }
+        public ImmutableArray<InputEntry> InputEntries { get; } = [.. inputEntries];
+        public ImmutableHashSet<ITransition> InnerTransitions { get; } = [.. innerTransitions];
         public UnionState? Target { get; set; }
-
-        public UnionTransition(IEnumerable<InputEntry> inputEntries, IEnumerable<ITransition> innerTransitions)
-        {
-            this.InputEntries = inputEntries.ToImmutableArray();
-            this.InnerTransitions = innerTransitions.ToImmutableHashSet();
-        }
 
         public bool Equals(UnionTransition? other) => other is not null && this.InnerTransitions.SetEquals(other.InnerTransitions);
 
@@ -124,12 +112,18 @@ public static class FSMUtility
         }
     }
 
+    /// <summary>
+    /// 执行不确定的有限状态机的确定化处理，返回确定化后的初始确定的有限状态机的起始状态。
+    /// </summary>
+    /// <param name="nfa">要执行确定化处理的不确定的有限状态机。</param>
+    /// <param name="provider">用于匹配输入符号的提供者。</param>
+    /// <returns>确定化得到的确定的有限状态机的起始状态。</returns>
     public static IState Determine(this INFA nfa, IInputSymbolProvider provider)
     {
         nfa.EpsilonClosure();
 
         Queue<UnionState> processing = new();
-        Dictionary<UnionState, UnionState> processed = new();
+        Dictionary<UnionState, UnionState> processed = [];
 
         UnionState start, current;
         start = new([nfa.StartState]);
@@ -187,7 +181,7 @@ public static class FSMUtility
     {
         ArgumentNullExceptionExtension.ThrowIfNull(startState);
 
-        HashSet<IState> states = new();
+        HashSet<IState> states = [];
         FSMUtility.RecurGetStatesInternal(startState, states);
 
         return states;
@@ -232,7 +226,7 @@ public static class FSMUtility
     {
         ArgumentNullExceptionExtension.ThrowIfNull(startState);
 
-        HashSet<ITransition> transitions = new();
+        HashSet<ITransition> transitions = [];
         foreach (var transition in startState.Transitions)
             transitions.UnionWith(transition.RecurGetTransitions());
 
@@ -249,7 +243,7 @@ public static class FSMUtility
     {
         ArgumentNullExceptionExtension.ThrowIfNull(transition);
 
-        HashSet<ITransition> transitions = new();
+        HashSet<ITransition> transitions = [];
         FSMUtility.RecurGetTransitionsInternal(transition, transitions);
 
         return transitions;
@@ -279,7 +273,7 @@ public static class FSMUtility
     {
         ArgumentNullExceptionExtension.ThrowIfNull(startState);
 
-        HashSet<IState> states = new();
+        HashSet<IState> states = [];
         FSMUtility.RecurGetReachableStatesInternal(startState, states);
 
         return states;
@@ -296,7 +290,7 @@ public static class FSMUtility
         ArgumentNullExceptionExtension.ThrowIfNull(transition);
 
         if (transition.Target is null) throw new TargetNullException();
-        HashSet<IState> states = new() { transition.Target };
+        HashSet<IState> states = [transition.Target];
         FSMUtility.RecurGetReachableStatesInternal(transition.Target, states);
 
         return states;
@@ -325,7 +319,7 @@ public static class FSMUtility
     {
         ArgumentNullExceptionExtension.ThrowIfNull(startState);
 
-        HashSet<ITransition> transitions = new();
+        HashSet<ITransition> transitions = [];
         foreach (var transition in startState.Transitions.Where(_transition => _transition is not null))
         {
             if (transitions.Add(transition) && transition.IsEpsilon)
@@ -345,7 +339,7 @@ public static class FSMUtility
     {
         ArgumentNullExceptionExtension.ThrowIfNull(transition);
 
-        HashSet<ITransition> transitions = new();
+        HashSet<ITransition> transitions = [];
         FSMUtility.RecurGetReachableTransitionsInternal(transition, transitions);
 
         return transitions;

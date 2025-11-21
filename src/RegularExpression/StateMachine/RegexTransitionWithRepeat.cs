@@ -3,21 +3,14 @@ using System.Diagnostics;
 
 namespace SamLu.RegularExpression.StateMachine;
 
-internal class RegexTransitionWithRepeat<T> : RegexTransition<T>
+internal class RegexTransitionWithRepeat<T>(IEnumerable<InputEntry<T>> inputEntries,
+    ulong? minimumCount,
+    ulong? maximumCount,
+    bool isGreedy) : RegexTransition<T>(inputEntries)
 {
-    protected internal ulong? minimumCount;
-    protected internal ulong? maximumCount;
-    protected internal readonly bool isGreedy;
-
-    public RegexTransitionWithRepeat(IEnumerable<InputEntry<T>> inputEntries,
-        ulong? minimumCount,
-        ulong? maximumCount,
-        bool isGreedy) : base(inputEntries)
-    {
-        this.minimumCount = minimumCount;
-        this.maximumCount = maximumCount;
-        this.isGreedy = isGreedy;
-    }
+    protected internal ulong? minimumCount = minimumCount;
+    protected internal ulong? maximumCount = maximumCount;
+    protected internal readonly bool isGreedy = isGreedy;
 
     internal override RegexTransition<T> WithRepeat(ulong? minimumCount = 0, ulong? maximumCount = null, bool isGreedy = true)
     {

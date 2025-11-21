@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace SamLu.RegularExpression.UnitTests;
 
 public class CharTests
@@ -41,6 +39,17 @@ public class CharTests
                 Assert.True(range.IsMatch(c));
             else
                 Assert.False(range.IsMatch(c));
+        }
+    }
+
+    [Fact]
+    public void RangeTest_UNICODE()
+    {
+        var range = Range(char.MinValue, char.MaxValue);
+        for (int i = char.MinValue; i <= char.MaxValue; i++)
+        {
+            char c = (char)i;
+            Assert.True(range.IsMatch(c));
         }
     }
 }
