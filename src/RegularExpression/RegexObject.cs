@@ -1,5 +1,4 @@
 ﻿using SamLu.RegularExpression.StateMachine;
-using SamLu.StateMachine;
 
 namespace SamLu.RegularExpression;
 
@@ -7,19 +6,17 @@ namespace SamLu.RegularExpression;
 /// 表示正则对象。所有提供正则支持的正则模块应继承此类。
 /// </summary>
 /// <typeparam name="T">正则接受的对象的类型。</typeparam>
-public abstract class RegexObject<T> : IEquatable<RegexObject<T>>, ICloneable
+/// <remarks>
+/// 使用指定的 <see cref="RegexProvider{T}"/> 初始化正则对象。
+/// </remarks>
+/// <param name="provider">提供操作正则对象的方法的对象。</param>
+/// <exception cref="ArgumentNullException"><paramref name="provider"/> 的值为 <see langword="null"/> 。</exception>
+public abstract class RegexObject<T>(RegexProvider<T> provider) : IEquatable<RegexObject<T>>, ICloneable
 {
     /// <summary>
     /// 内部储存的提供操作正则对象的方法的对象。
     /// </summary>
-    protected RegexProvider<T> provider;
-
-    /// <summary>
-    /// 使用指定的 <see cref="RegexProvider{T}"/> 初始化正则对象。
-    /// </summary>
-    /// <param name="provider">提供操作正则对象的方法的对象。</param>
-    /// <exception cref="ArgumentNullException"><paramref name="provider"/> 的值为 <see langword="null"/> 。</exception>
-    protected RegexObject(RegexProvider<T> provider) => this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+    protected RegexProvider<T> provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
     /// <summary>
     /// 将此正则对象与另一个正则对象串联。

@@ -7,29 +7,24 @@ namespace SamLu.StateMachine;
 /// </summary>
 public abstract class FSM : IFSM
 {
-    /// <summary>
-    /// 储存当前状态。
-    /// </summary>
-    protected IState? currentState;
-    /// <summary>
-    /// 储存起始状态。
-    /// </summary>
-    protected IState? startState;
-
     /// <inheritdoc/>
     /// <exception cref="UninitializedException">有限状态机未初始化。</exception>
-    public virtual IState CurrentState => this.currentState ?? throw new UninitializedException("有限状态机未初始化。");
+    public virtual IState CurrentState
+    {
+        get => field ?? throw new UninitializedException("有限状态机未初始化。");
+        protected set => field = value;
+    }
 
     /// <inheritdoc/>
-    /// <exception cref="ArgumentNullException"><paramref name="value"/> 的值为 <see langword="null"/> 。</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/>的值为<see langword="null"/>。</exception>
     public virtual IState StartState
     {
-        get => this.startState ?? throw new UninitializedException("有限状态机未初始化。");
+        get => field ?? throw new UninitializedException("有限状态机未初始化。");
         set
         {
             ArgumentNullExceptionExtension.ThrowIfNull(value);
 
-            this.startState = value;
+            field = value;
             this.Reset();
         }
     }
@@ -38,45 +33,45 @@ public abstract class FSM : IFSM
     /// <exception cref="UninitializedException">有限状态机未初始化。</exception>
     public virtual void Reset()
     {
-        if (this.currentState is null) throw new UninitializedException("有限状态机未初始化。");
+        if (this.CurrentState is null) throw new UninitializedException("有限状态机未初始化。");
 
-        this.currentState = this.startState;
+        this.CurrentState = this.StartState;
     }
 
     /// <inheritdoc/>
     public abstract bool Transit(object? input, IInputSymbolProvider provider);
 }
 
-/// <inheritdoc cref="FSM"/>
+/// <summary>
+/// 表示有限状态机。
+/// </summary>
+/// <inheritdoc cref="IFSM{TInput, TState, TTransition}"/>
 public abstract class FSM<TInput, TState, TTransition> : IFSM<TInput, TState, TTransition>
     where TState : IState<TTransition>
     where TTransition : ITransition<TInput, TState>
 {
-    /// <inheritdoc cref="FSM.currentState"/>
-    protected TState? currentState;
-    /// <inheritdoc cref="FSM.startState"/>
-    protected TState? startState;
-
     /// <inheritdoc/>
     /// <exception cref="UninitializedException">有限状态机未初始化。</exception>
-    public virtual TState CurrentState => this.currentState ?? throw new UninitializedException("有限状态机未初始化。");
+    public virtual TState CurrentState
+    {
+        get => field ?? throw new UninitializedException("有限状态机未初始化。");
+        set => field = value;
+    }
+    IState IFSM.CurrentState => this.CurrentState;
 
     /// <inheritdoc/>
-    /// <exception cref="ArgumentNullException"><paramref name="value"/> 的值为 <see langword="null"/> 。</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> 的值为<see langword="null"/>。</exception>
     public virtual TState StartState
     {
-        get => this.startState ?? throw new UninitializedException("有限状态机未初始化。");
+        get => field ?? throw new UninitializedException("有限状态机未初始化。");
         set
         {
             ArgumentNullExceptionExtension.ThrowIfNull(value);
 
-            this.startState = value;
+            field = value;
             this.Reset();
         }
     }
-
-    IState IFSM.CurrentState => this.CurrentState;
-
     IState IFSM.StartState
     {
         get => this.StartState;
@@ -85,12 +80,7 @@ public abstract class FSM<TInput, TState, TTransition> : IFSM<TInput, TState, TT
 
     /// <inheritdoc/>
     /// <exception cref="UninitializedException">有限状态机未初始化。</exception>
-    public virtual void Reset()
-    {
-        if (this.startState is null) throw new UninitializedException("有限状态机未初始化。");
-
-        this.currentState = this.startState;
-    }
+    public virtual void Reset() => this.CurrentState = this.StartState;
 
     /// <inheritdoc/>
     public abstract bool Transit(TInput? input, IInputSymbolProvider<TInput> provider);

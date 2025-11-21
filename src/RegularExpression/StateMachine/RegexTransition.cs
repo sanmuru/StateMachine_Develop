@@ -11,7 +11,7 @@ public class RegexTransition<T> : Transition<T, RegexState<T>>
     public override bool IsEpsilon => this.isEpsilon;
 
     protected IEnumerable<InputEntry<T>> inputEntries;
-    public override ImmutableArray<InputEntry<T>> InputEntries => this.inputEntries.ToImmutableArray();
+    public override ImmutableArray<InputEntry<T>> InputEntries => [.. this.inputEntries];
 
     public RegexTransition() => this.isEpsilon = true;
 

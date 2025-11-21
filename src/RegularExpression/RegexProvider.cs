@@ -24,22 +24,22 @@ public abstract class RegexProvider<T>
     }
 
     /// <summary>
-    /// 创建正则类型 <typeparamref name="TObject"/> 的新实例。
+    /// 创建正则类型<typeparamref name="TObject"/>的新实例。
     /// </summary>
     /// <typeparam name="TObject">要创建的正则类型。</typeparam>
     /// <param name="original">参照的母本。</param>
     /// <param name="args">创建新实例所需的参数。</param>
-    /// <returns>正则类型 <typeparamref name="TObject"/> 的新实例。</returns>
+    /// <returns>正则类型<typeparamref name="TObject"/>的新实例。</returns>
     public virtual TObject CreateRegexObject<TObject>(TObject? original, params object?[] args) where TObject : RegexObject<T> => this.CreateRegexObjectWithReflection(original, args);
 
     /// <summary>
-    /// 使用反射技术调用正则类型 <typeparamref name="TObject"/> 的构造器并创建新实例。
+    /// 使用反射技术调用正则类型<typeparamref name="TObject"/>的构造器并创建新实例。
     /// </summary>
     /// <typeparam name="TObject">要创建的正则类型。</typeparam>
     /// <param name="original">参照的母本。</param>
     /// <param name="args">创建新实例所需的参数。</param>
-    /// <returns>正则类型 <typeparamref name="TObject"/> 的新实例。</returns>
-    /// <exception cref="CreatorNotSupportedException">不存在构造类型 <typeparamref name="TObject"/> 的构造器。</exception>
+    /// <returns>正则类型<typeparamref name="TObject"/>的新实例。</returns>
+    /// <exception cref="CreatorNotSupportedException">不存在构造类型<typeparamref name="TObject"/>的构造器。</exception>
     protected internal TObject CreateRegexObjectWithReflection<TObject>(TObject? original, params object?[] args)
         where TObject : RegexObject<T>
     {

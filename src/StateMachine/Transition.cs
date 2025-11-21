@@ -71,5 +71,5 @@ public abstract class Transition<TInput, TState> : ITransition<TInput, TState> w
 
     /// <inheritdoc/>
     public abstract ImmutableArray<InputEntry<TInput>> InputEntries { get; }
-    ImmutableArray<InputEntry> ITransition.InputEntries => this.InputEntries.Select(static entry => (InputEntry)entry).ToImmutableArray();
+    ImmutableArray<InputEntry> ITransition.InputEntries => [.. this.InputEntries.Select(static entry => (InputEntry)entry)];
 }
