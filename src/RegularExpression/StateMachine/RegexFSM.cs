@@ -26,7 +26,7 @@ public class RegexDFA<T> : DFA<T, RegexState<T>, RegexTransition<T>>
         {
             if (provider.Contains(transition.InputEntries, input))
             {
-                this.currentState = transition.Target;
+                this.CurrentState = transition.Target!;
                 return true;
             }
         }

@@ -21,6 +21,7 @@ public interface IFSM
     /// 接受一个指定输入并进行转换。返回一个值，指示操作是否成功。
     /// </summary>
     /// <param name="input">接收的输入。</param>
+    /// <param name="provider">用于匹配输入符号的提供者。</param>
     /// <returns>一个值，指示移动是否成功。</returns>
     bool Transit(object? input, IInputSymbolProvider provider);
 

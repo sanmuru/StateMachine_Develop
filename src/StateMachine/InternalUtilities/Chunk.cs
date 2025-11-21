@@ -3,7 +3,6 @@
 
 #if NETSTANDARD2_0
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Linq

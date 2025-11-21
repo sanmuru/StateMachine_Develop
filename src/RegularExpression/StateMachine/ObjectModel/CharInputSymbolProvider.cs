@@ -1,5 +1,4 @@
 ﻿using SamLu.StateMachine.ObjectModel;
-using System.Diagnostics;
 
 namespace SamLu.RegularExpression.StateMachine.ObjectModel;
 
